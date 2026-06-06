@@ -348,7 +348,7 @@ const firebaseConfig = {
 
 // UID del administrador — se rellena automáticamente la primera vez que haces login
 // Después de hacer login por primera vez, copia tu UID del alert y reemplaza '' aquí.
-const ADMIN_UID = '5ExutEJNGyV9oBUxyaZglJu38ji1';  // ← pondrás aquí tu UID tras el primer login
+const ADMIN_UID = '';  // ← pondrás aquí tu UID tras el primer login
 
 const app   = initializeApp(firebaseConfig);
 const db    = getFirestore(app);
@@ -584,9 +584,14 @@ window.resetPaises = async ()=>{
 };
 window.agregarPais = async ()=>{
   let inp=document.getElementById('nuevoPais'), val=inp.value.trim(); if(!val) return;
-
-let m=val.match(/^([\uD83C][\uDDE6-\uDDFF][\uD83C][\uDDE6-\uDDFF])\s*(.+)$/);
-  state.paises.push(m?{flag:m[1].trim(),nombre:m[2].trim()}:{flag:'🏳️',nombre:val});
+  // Detecta emojis incluyendo banderas (secuencias de regional indicators u otros compuestos)
+  let m=val.match(/^((?:\p{Emoji_Presentation}|\p{Emoji}\uFE0F)(?:\u200D(?:\p{Emoji_Presentation}|\p{Emoji}\uFE0F))*[\uFE0F\u20E3]?|[\uD83C][\uDDE6-\uDDFF][\uD83C][\uDDE6-\uDDFF])\s*(.+)$/u);
+  if(m){
+    state.paises.push({flag:m[1].trim(), nombre:m[2].trim()});
+  } else {
+    // sin emoji — pedir que lo añada, o guardar sin bandera
+    state.paises.push({flag:'🏳️', nombre:val});
+  }
   inp.value=''; await saveKey('paises',{lista:state.paises});
 };
 window.quitarPais = async i=>{
@@ -884,22 +889,42 @@ window.copiarMensaje=()=>{
 // ── PAÍSES DEFAULT ──
 function PAISES_DEFAULT(){
   return [
-    {flag:'🇺🇸',nombre:'Estados Unidos'},{flag:'🇲🇽',nombre:'México'},{flag:'🇨🇦',nombre:'Canadá'},
-    {flag:'🇧🇷',nombre:'Brasil'},{flag:'🇦🇷',nombre:'Argentina'},{flag:'🇫🇷',nombre:'Francia'},
-    {flag:'🇩🇪',nombre:'Alemania'},{flag:'🇪🇸',nombre:'España'},{flag:'🇵🇹',nombre:'Portugal'},
-    {flag:'🏴󠁧󠁢󠁥󠁮󠁧󠁿',nombre:'Inglaterra'},{flag:'🇳🇱',nombre:'Países Bajos'},{flag:'🇮🇹',nombre:'Italia'},
-    {flag:'🇧🇪',nombre:'Bélgica'},{flag:'🇭🇷',nombre:'Croacia'},{flag:'🇵🇱',nombre:'Polonia'},
-    {flag:'🇺🇾',nombre:'Uruguay'},{flag:'🇨🇴',nombre:'Colombia'},{flag:'🇨🇱',nombre:'Chile'},
-    {flag:'🇪🇨',nombre:'Ecuador'},{flag:'🇵🇪',nombre:'Perú'},{flag:'🇯🇵',nombre:'Japón'},
-    {flag:'🇰🇷',nombre:'Corea del Sur'},{flag:'🇦🇺',nombre:'Australia'},{flag:'🇮🇷',nombre:'Irán'},
-    {flag:'🇸🇦',nombre:'Arabia Saudí'},{flag:'🇲🇦',nombre:'Marruecos'},{flag:'🇸🇳',nombre:'Senegal'},
-    {flag:'🇬🇭',nombre:'Ghana'},{flag:'🇨🇲',nombre:'Camerún'},{flag:'🇨🇮',nombre:'Costa de Marfil'},
-    {flag:'🇳🇬',nombre:'Nigeria'},{flag:'🇩🇿',nombre:'Argelia'},{flag:'🇨🇷',nombre:'Costa Rica'},
-    {flag:'🇵🇦',nombre:'Panamá'},{flag:'🇸🇻',nombre:'El Salvador'},{flag:'🇭🇳',nombre:'Honduras'},
-    {flag:'🇧🇴',nombre:'Bolivia'},{flag:'🇵🇾',nombre:'Paraguay'},{flag:'🇻🇪',nombre:'Venezuela'},
-    {flag:'🇳🇿',nombre:'Nueva Zelanda'},{flag:'🇮🇩',nombre:'Indonesia'},{flag:'🇵🇭',nombre:'Filipinas'},
-    {flag:'🇹🇷',nombre:'Turquía'},{flag:'🇦🇹',nombre:'Austria'},{flag:'🇸🇪',nombre:'Suecia'},
-    {flag:'🇺🇦',nombre:'Ucrania'},{flag:'🇷🇴',nombre:'Rumanía'},{flag:'🇬🇷',nombre:'Grecia'}
+    // GRUPO A
+    {flag:'🇲🇽',nombre:'México'},{flag:'🇿🇦',nombre:'Sudáfrica'},
+    {flag:'🇰🇷',nombre:'Rep. Corea'},{flag:'🇨🇿',nombre:'Chequia'},
+    // GRUPO B
+    {flag:'🇨🇦',nombre:'Canadá'},{flag:'🇧🇦',nombre:'Bosnia y Her.'},
+    {flag:'🇶🇦',nombre:'Catar'},{flag:'🇨🇭',nombre:'Suiza'},
+    // GRUPO C
+    {flag:'🇧🇷',nombre:'Brasil'},{flag:'🇲🇦',nombre:'Marruecos'},
+    {flag:'🇭🇹',nombre:'Haití'},{flag:'🏴󠁧󠁢󠁳󠁣󠁴󠁿',nombre:'Escocia'},
+    // GRUPO D
+    {flag:'🇺🇸',nombre:'EEUU'},{flag:'🇵🇾',nombre:'Paraguay'},
+    {flag:'🇦🇺',nombre:'Australia'},{flag:'🇹🇷',nombre:'Turquía'},
+    // GRUPO E
+    {flag:'🇩🇪',nombre:'Alemania'},{flag:'🇨🇼',nombre:'Curazao'},
+    {flag:'🇨🇮',nombre:'C. Marfil'},{flag:'🇪🇨',nombre:'Ecuador'},
+    // GRUPO F
+    {flag:'🇳🇱',nombre:'P. Bajos'},{flag:'🇯🇵',nombre:'Japón'},
+    {flag:'🇸🇪',nombre:'Suecia'},{flag:'🇹🇳',nombre:'Túnez'},
+    // GRUPO G
+    {flag:'🇧🇪',nombre:'Bélgica'},{flag:'🇪🇬',nombre:'Egipto'},
+    {flag:'🇮🇷',nombre:'Irán'},{flag:'🇳🇿',nombre:'N. Zelanda'},
+    // GRUPO H
+    {flag:'🇪🇸',nombre:'España'},{flag:'🇨🇻',nombre:'Cabo Verde'},
+    {flag:'🇸🇦',nombre:'Arabia S.'},{flag:'🇺🇾',nombre:'Uruguay'},
+    // GRUPO I
+    {flag:'🇫🇷',nombre:'Francia'},{flag:'🇸🇳',nombre:'Senegal'},
+    {flag:'🇮🇶',nombre:'Irak'},{flag:'🇳🇴',nombre:'Noruega'},
+    // GRUPO J
+    {flag:'🇦🇷',nombre:'Argentina'},{flag:'🇩🇿',nombre:'Argelia'},
+    {flag:'🇦🇹',nombre:'Austria'},{flag:'🇯🇴',nombre:'Jordania'},
+    // GRUPO K
+    {flag:'🇵🇹',nombre:'Portugal'},{flag:'🇨🇩',nombre:'R. D. Congo'},
+    {flag:'🇺🇿',nombre:'Uzbekistán'},{flag:'🇨🇴',nombre:'Colombia'},
+    // GRUPO L
+    {flag:'🏴󠁧󠁢󠁥󠁮󠁧󠁿',nombre:'Inglaterra'},{flag:'🇭🇷',nombre:'Croacia'},
+    {flag:'🇬🇭',nombre:'Ghana'},{flag:'🇵🇦',nombre:'Panamá'}
   ];
 }
 
