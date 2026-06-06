@@ -218,6 +218,9 @@
         <div><div class="label">⚡ Cuartos</div><input type="number" id="pts_cuartos" value="8" min="0"></div>
         <div><div class="label">🔥 Octavos</div><input type="number" id="pts_octavos" value="4" min="0"></div>
         <div><div class="label">✅ Dieciseisavos</div><input type="number" id="pts_dieciseisavos" value="2" min="0"></div>
+        <div><div class="label">🥇 Bonus campeón</div><input type="number" id="bonusCampeon" value="40" min="0">
+          <div style="font-size:.7rem;color:var(--gris);margin-top:3px">Solo si tu finalista gana</div>
+        </div>
       </div>
       <hr class="divider">
       <h3>🎯 Países por jugador</h3>
@@ -345,7 +348,7 @@ const firebaseConfig = {
 
 // UID del administrador — se rellena automáticamente la primera vez que haces login
 // Después de hacer login por primera vez, copia tu UID del alert y reemplaza '' aquí.
-const ADMIN_UID = '5ExutEJNGYV90BUxyaZglJu38ji1';  // ← pondrás aquí tu UID tras el primer login
+const ADMIN_UID = '';  // ← pondrás aquí tu UID tras el primer login
 
 const app   = initializeApp(firebaseConfig);
 const db    = getFirestore(app);
@@ -363,11 +366,11 @@ const REF = {
 // ── ESTADO LOCAL ──
 const RONDAS   = ['dieciseisavos','octavos','cuartos','semis','finalista'];
 const RLABELS  = {finalista:'🥈 Finalista',semis:'🥉 Semifinales',cuartos:'⚡ Cuartos',octavos:'🔥 Octavos',dieciseisavos:'✅ Dieciseisavos'};
-const JERARQUIA= ['dieciseisavos','octavos','cuartos','semis','finalista'];
+const JERARQUIA= ['dieciseisavos','octavos','cuartos','semis','finalista','campeon'];
 
 let state = {
   config:{ grupoNombre:'⚽ Amigos del Mundial', torneoNombre:'Mundial 2026 🇺🇸🇨🇦🇲🇽',
-           puntos:{finalista:25,semis:15,cuartos:8,octavos:4,dieciseisavos:2}, numPicks:5 },
+           puntos:{finalista:25,semis:15,cuartos:8,octavos:4,dieciseisavos:2}, bonusCampeon:40, numPicks:5 },
   jugadores:[], paises:[...PAISES_DEFAULT()], asignaciones:{}, resultados:{}
 };
 let isAdmin = false;
@@ -430,6 +433,7 @@ function syncConfigUI(){
   ['finalista','semis','cuartos','octavos','dieciseisavos'].forEach(r=>{
     let el=document.getElementById('pts_'+r); if(el) el.value=state.config.puntos[r]||0;
   });
+  let bc=document.getElementById('bonusCampeon'); if(bc) bc.value=state.config.bonusCampeon||40;
   let np=document.getElementById('numPicks'); if(np) np.value=state.config.numPicks||5;
   let nl=document.getElementById('numPicksLabel'); if(nl) nl.textContent=state.config.numPicks||5;
 }
@@ -485,6 +489,8 @@ function calcPuntos(jug){
     if(!superaHandicap(key,handicap)) return;
     let a=faseAlcanzada(key);
     RONDAS.forEach(r=>{ if(nivelFase(r)<=nivelFase(a)) pts+=state.config.puntos[r]||0; });
+    // bonus si tiene hándicap finalista y el país ganó el mundial
+    if(handicap==='finalista' && a==='campeon') pts+=state.config.bonusCampeon||0;
   });
   return pts;
 }
@@ -500,9 +506,10 @@ window.guardarConfig = async ()=>{
   state.config.grupoNombre  = document.getElementById('grupoNombre').value;
   state.config.torneoNombre = document.getElementById('torneoNombre').value;
   state.config.numPicks     = parseInt(document.getElementById('numPicks').value)||5;
-  ['finalista','semis','cuartos','octavos','dieciseisavos'].forEach(r=>{
+  ['campeon','finalista','semis','cuartos','octavos','dieciseisavos'].forEach(r=>{
     state.config.puntos[r] = parseInt(document.getElementById('pts_'+r).value)||0;
   });
+  state.config.bonusCampeon = parseInt(document.getElementById('bonusCampeon').value)||0;
   await saveKey('config', state.config);
   let ok=document.getElementById('config-ok'); ok.style.display='inline';
   setTimeout(()=>ok.style.display='none',2000);
@@ -694,9 +701,11 @@ function renderAsignaciones(){
 // ── RESULTADOS ──
 function renderFaseSelector(){
   let div=document.getElementById('faseSelector'); if(!div) return;
-  div.innerHTML=RONDAS.map(r=>`
+  const FASES_RES=[...RONDAS,'campeon'];
+  const LABELS_RES={...RLABELS, campeon:'🥇 Campeón'};
+  div.innerHTML=FASES_RES.map(r=>`
     <button class="btn ${faseActiva===r?'btn-verde':'btn-outline'}" style="font-size:.78rem;padding:6px 13px"
-      onclick="setFaseActiva('${r}')">${RLABELS[r].split(' ').slice(0,2).join(' ')}</button>`).join('');
+      onclick="setFaseActiva('${r}')">${LABELS_RES[r].split(' ').slice(0,2).join(' ')}</button>`).join('');
 }
 window.setFaseActiva = r=>{ faseActiva=r; renderFaseSelector(); renderResultadosPanel(); };
 
@@ -710,17 +719,24 @@ function paisesEnJuego(fase){
 
 function renderResultadosPanel(){
   let panel=document.getElementById('resultadosPanel'); if(!panel) return;
+  // Para registrar resultados incluimos campeon como fase especial
+  const RONDAS_RES = [...RONDAS, 'campeon'];
+  const RLABELS_RES = {...RLABELS, campeon:'🥇 Campeón'};
   let enJuego=paisesEnJuego(faseActiva);
   let ordenados=[...state.paises].sort((a,b)=>(enJuego.has(paisKey(b))?1:0)-(enJuego.has(paisKey(a))?1:0));
   let html=`<div style="display:flex;flex-direction:column;gap:4px">`;
   ordenados.forEach(p=>{
     let key=paisKey(p), actual=state.resultados[key]||'';
-    let paso=actual&&nivelFase(actual)>=nivelFase(faseActiva);
+    // para la fase activa, campeon > finalista
+    const JERARQUIA_RES=['dieciseisavos','octavos','cuartos','semis','finalista','campeon'];
+    let nivelActiva = faseActiva==='campeon'?5:nivelFase(faseActiva);
+    let nivelActual = JERARQUIA_RES.indexOf(actual);
+    let paso = actual && nivelActual >= nivelActiva;
     let relevante=enJuego.has(key);
     let apostadores=[];
     Object.entries(state.asignaciones).forEach(([jug,picks])=>{
       (picks||[]).forEach(({key:k,handicap})=>{
-        if(k===key&&nivelFase(handicap)<=nivelFase(faseActiva)) apostadores.push(jug);
+        if(k===key&&nivelFase(handicap)<=nivelFase(faseActiva==='campeon'?'finalista':faseActiva)) apostadores.push(jug);
       });
     });
     html+=`<div style="display:flex;align-items:center;gap:8px;
@@ -734,7 +750,7 @@ function renderResultadosPanel(){
         </div>
         ${apostadores.length?`<div style="font-size:.68rem;color:var(--gris)">${apostadores.join(', ')}</div>`:''}
       </div>
-      ${actual?`<span style="font-size:.68rem;color:var(--gris)">hasta: ${RLABELS[actual]?.split(' ').slice(1,3).join(' ')||actual}</span>`:''}
+      ${actual?`<span style="font-size:.68rem;color:var(--gris)">${actual==='campeon'?'🥇 Campeón':(RLABELS[actual]?.split(' ').slice(1,3).join(' ')||actual)}</span>`:''}
       <div style="width:26px;height:26px;border-radius:50%;border:2px solid ${paso?'var(--verde)':'var(--borde)'};
         background:${paso?'var(--verde)':'transparent'};display:flex;align-items:center;justify-content:center;
         font-size:.78rem;flex-shrink:0">${paso?'✓':''}</div>
@@ -790,16 +806,18 @@ function renderRankingPublico(){
       <div style="padding:6px 15px 10px">`;
     r.detalle.forEach(({p,handicap,alcanzada,supera,ptsEste})=>{
       let sinRes=!alcanzada;
+      let esCampeon = alcanzada==='campeon';
+      let bonusAplica = handicap==='finalista' && esCampeon;
       html+=`<div style="display:flex;align-items:center;gap:7px;font-size:.78rem;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04)">
         <span style="font-size:.92rem">${p.flag}</span>
         <span style="flex:1;font-weight:600;color:${supera?'var(--texto)':sinRes?'var(--gris)':'rgba(255,255,255,.35)'}">${p.nombre}</span>
         <span style="color:var(--oro);font-size:.68rem">▲ ${RLABELS[handicap]?.split(' ').slice(1,3).join(' ')||handicap}</span>
         <span style="font-size:.68rem;color:${supera?'var(--verde)':sinRes?'var(--gris)':'var(--rojo)'};white-space:nowrap">
-          ${sinRes?'⏳':supera?`✅ ${RLABELS[alcanzada]?.split(' ').slice(1,3).join(' ')||''}`:
+          ${sinRes?'⏳':supera?`✅ ${RLABELS[alcanzada]?.split(' ').slice(1,3).join(' ')||''}${esCampeon?' 🥇':''}`:
             `❌ ${RLABELS[alcanzada]?.split(' ').slice(1,3).join(' ')||''}`}
         </span>
         <span style="font-weight:700;color:${ptsEste>0?'var(--verde)':'var(--gris)'};min-width:32px;text-align:right">
-          ${ptsEste>0?'+'+ptsEste:'—'}
+          ${ptsEste>0?'+'+ptsEste+(bonusAplica?` <span style="color:var(--oro);font-size:.65rem">+${state.config.bonusCampeon||0}🥇</span>`:''):'—'}
         </span>
       </div>`;
     });
