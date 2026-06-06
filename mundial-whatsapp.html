@@ -506,7 +506,7 @@ window.guardarConfig = async ()=>{
   state.config.grupoNombre  = document.getElementById('grupoNombre').value;
   state.config.torneoNombre = document.getElementById('torneoNombre').value;
   state.config.numPicks     = parseInt(document.getElementById('numPicks').value)||5;
-  ['campeon','finalista','semis','cuartos','octavos','dieciseisavos'].forEach(r=>{
+  ['finalista','semis','cuartos','octavos','dieciseisavos'].forEach(r=>{
     state.config.puntos[r] = parseInt(document.getElementById('pts_'+r).value)||0;
   });
   state.config.bonusCampeon = parseInt(document.getElementById('bonusCampeon').value)||0;
