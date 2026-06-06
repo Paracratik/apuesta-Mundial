@@ -3,525 +3,866 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🏆 Mundial WhatsApp – Sorteo de Países</title>
+<title>🏆 Mundial WhatsApp</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Figtree:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --verde: #00c853;
-    --verde-oscuro: #007c32;
-    --oro: #ffd600;
-    --rojo: #e53935;
-    --fondo: #0a1628;
-    --fondo2: #0f1e38;
-    --card: #162040;
-    --card2: #1c2a50;
-    --texto: #e8eaf6;
-    --gris: #7b8ab8;
-    --borde: #1e3060;
+    --verde:#00c853; --verde-oscuro:#007c32; --oro:#ffd600;
+    --rojo:#e53935; --fondo:#0a1628; --fondo2:#0f1e38;
+    --card:#162040; --texto:#e8eaf6; --gris:#7b8ab8; --borde:#1e3060;
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: 'Figtree', sans-serif;
-    background: var(--fondo);
-    color: var(--texto);
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
-  /* Fondo con estrellas */
-  body::before {
-    content: '';
-    position: fixed; inset: 0;
-    background:
-      radial-gradient(ellipse at 20% 20%, rgba(0,200,83,0.07) 0%, transparent 50%),
-      radial-gradient(ellipse at 80% 80%, rgba(255,214,0,0.06) 0%, transparent 50%),
-      radial-gradient(ellipse at 50% 50%, rgba(229,57,53,0.04) 0%, transparent 60%);
-    pointer-events: none; z-index: 0;
-  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Figtree',sans-serif;background:var(--fondo);color:var(--texto);min-height:100vh;overflow-x:hidden}
+  body::before{content:'';position:fixed;inset:0;background:
+    radial-gradient(ellipse at 20% 20%,rgba(0,200,83,.07) 0%,transparent 50%),
+    radial-gradient(ellipse at 80% 80%,rgba(255,214,0,.06) 0%,transparent 50%);
+    pointer-events:none;z-index:0}
 
-  /* ──── HEADER ──── */
-  header {
-    text-align: center;
-    padding: 36px 20px 20px;
-    position: relative; z-index: 1;
-    border-bottom: 2px solid var(--borde);
-  }
-  header .trophy { font-size: 3rem; animation: bounce 2s infinite; }
-  @keyframes bounce {
-    0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)}
-  }
-  header h1 {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(2.2rem, 7vw, 4rem);
-    letter-spacing: 4px;
-    background: linear-gradient(135deg, #fff 20%, var(--oro) 60%, var(--verde) 100%);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    line-height: 1;
-  }
-  header p { color: var(--gris); font-size: 0.95rem; margin-top: 6px; }
+  /* HEADER */
+  header{text-align:center;padding:28px 20px 16px;position:relative;z-index:1;border-bottom:2px solid var(--borde)}
+  header .trophy{font-size:2.6rem;animation:bounce 2s infinite}
+  @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+  header h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(2rem,7vw,3.6rem);letter-spacing:4px;
+    background:linear-gradient(135deg,#fff 20%,var(--oro) 60%,var(--verde) 100%);
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1}
+  header p{color:var(--gris);font-size:.9rem;margin-top:5px}
 
-  /* ──── TABS ──── */
-  .tabs {
-    display: flex; justify-content: center; gap: 6px;
-    padding: 18px 20px 0; position: relative; z-index: 1;
-    flex-wrap: wrap;
-  }
-  .tab-btn {
-    background: var(--card); border: 1.5px solid var(--borde);
-    color: var(--gris); padding: 9px 18px; border-radius: 30px;
-    cursor: pointer; font-family: 'Figtree', sans-serif;
-    font-weight: 600; font-size: 0.85rem; transition: all 0.2s;
-  }
-  .tab-btn:hover { border-color: var(--verde); color: var(--verde); }
-  .tab-btn.active {
-    background: var(--verde); border-color: var(--verde);
-    color: #0a1628;
-  }
+  /* AUTH BAR */
+  #authBar{display:flex;align-items:center;justify-content:flex-end;gap:10px;
+    padding:8px 20px;background:var(--fondo2);border-bottom:1px solid var(--borde);
+    font-size:.82rem;position:relative;z-index:2}
+  #authBar .user-info{display:flex;align-items:center;gap:7px;color:var(--gris)}
+  #authBar img{width:26px;height:26px;border-radius:50%}
+  .btn-google{display:flex;align-items:center;gap:7px;background:#fff;color:#333;
+    border:none;border-radius:8px;padding:6px 14px;font-family:'Figtree',sans-serif;
+    font-weight:700;font-size:.82rem;cursor:pointer;transition:all .2s}
+  .btn-google:hover{background:#f0f0f0}
+  .btn-logout{background:transparent;border:1px solid var(--borde);color:var(--gris);
+    border-radius:7px;padding:4px 10px;font-size:.78rem;cursor:pointer;font-family:'Figtree',sans-serif}
+  .btn-logout:hover{border-color:var(--rojo);color:var(--rojo)}
 
-  /* ──── CONTENIDO ──── */
-  .content { max-width: 960px; margin: 0 auto; padding: 24px 16px 60px; position: relative; z-index: 1; }
-  .tab-panel { display: none; }
-  .tab-panel.active { display: block; animation: fadeIn 0.3s ease; }
-  @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:none} }
+  /* ADMIN BADGE */
+  .admin-only{display:none}
+  body.is-admin .admin-only{display:block}
+  body.is-admin .admin-inline{display:inline-flex!important}
+  .admin-inline{display:none!important}
 
-  /* ──── CARDS ──── */
-  .card {
-    background: var(--card); border: 1.5px solid var(--borde);
-    border-radius: 16px; padding: 22px; margin-bottom: 18px;
-  }
-  .card h2 {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.5rem; letter-spacing: 2px;
-    color: var(--oro); margin-bottom: 14px;
-  }
-  .card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 10px; color: var(--texto); }
+  /* TABS */
+  .tabs{display:flex;justify-content:center;gap:6px;padding:16px 20px 0;position:relative;z-index:1;flex-wrap:wrap}
+  .tab-btn{background:var(--card);border:1.5px solid var(--borde);color:var(--gris);
+    padding:8px 16px;border-radius:30px;cursor:pointer;font-family:'Figtree',sans-serif;
+    font-weight:600;font-size:.83rem;transition:all .2s}
+  .tab-btn:hover{border-color:var(--verde);color:var(--verde)}
+  .tab-btn.active{background:var(--verde);border-color:var(--verde);color:#0a1628}
 
-  /* ──── INPUTS ──── */
-  input[type=text], input[type=number], textarea, select {
-    width: 100%; background: var(--fondo2); border: 1.5px solid var(--borde);
-    color: var(--texto); padding: 10px 14px; border-radius: 10px;
-    font-family: 'Figtree', sans-serif; font-size: 0.9rem;
-    outline: none; transition: border-color 0.2s;
-  }
-  input:focus, textarea:focus, select:focus { border-color: var(--verde); }
-  textarea { resize: vertical; min-height: 80px; }
+  /* CONTENT */
+  .content{max-width:960px;margin:0 auto;padding:22px 16px 60px;position:relative;z-index:1}
+  .tab-panel{display:none}
+  .tab-panel.active{display:block;animation:fadeIn .3s ease}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 
-  .input-row { display: flex; gap: 8px; margin-bottom: 10px; }
-  .input-row input { flex: 1; }
+  /* CARD */
+  .card{background:var(--card);border:1.5px solid var(--borde);border-radius:16px;padding:20px;margin-bottom:16px}
+  .card h2{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:2px;color:var(--oro);margin-bottom:12px}
+  .card h3{font-size:.97rem;font-weight:700;margin-bottom:9px}
 
-  /* ──── BOTONES ──── */
-  .btn {
-    display: inline-flex; align-items: center; gap: 6px;
-    padding: 10px 20px; border-radius: 10px; font-family: 'Figtree', sans-serif;
-    font-weight: 700; font-size: 0.9rem; cursor: pointer; border: none;
-    transition: all 0.18s; white-space: nowrap;
-  }
-  .btn-verde { background: var(--verde); color: #0a1628; }
-  .btn-verde:hover { background: #00e676; transform: translateY(-1px); }
-  .btn-oro { background: var(--oro); color: #0a1628; }
-  .btn-oro:hover { background: #ffe033; transform: translateY(-1px); }
-  .btn-rojo { background: var(--rojo); color: #fff; }
-  .btn-rojo:hover { background: #f44336; }
-  .btn-sm { padding: 6px 12px; font-size: 0.8rem; border-radius: 8px; }
-  .btn-outline {
-    background: transparent; border: 1.5px solid var(--borde);
-    color: var(--gris);
-  }
-  .btn-outline:hover { border-color: var(--verde); color: var(--verde); }
-  .btn-wa {
-    background: #25D366; color: #fff;
-    font-size: 1rem; padding: 14px 28px; border-radius: 14px;
-    border: none; cursor: pointer; font-weight: 700;
-    font-family: 'Figtree', sans-serif;
-    display: flex; align-items: center; gap: 8px;
-    transition: all 0.2s;
-  }
-  .btn-wa:hover { background: #20ba58; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(37,211,102,0.35); }
+  /* INPUTS */
+  input[type=text],input[type=number],textarea,select{
+    width:100%;background:var(--fondo2);border:1.5px solid var(--borde);
+    color:var(--texto);padding:9px 13px;border-radius:9px;
+    font-family:'Figtree',sans-serif;font-size:.88rem;outline:none;transition:border-color .2s}
+  input:focus,textarea:focus,select:focus{border-color:var(--verde)}
+  textarea{resize:vertical;min-height:75px}
+  .input-row{display:flex;gap:8px;margin-bottom:9px}
+  .input-row input{flex:1}
 
-  /* ──── JUGADORES ──── */
-  .player-list { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
-  .player-item {
-    display: flex; align-items: center; gap: 10px;
-    background: var(--fondo2); border: 1px solid var(--borde);
-    padding: 10px 14px; border-radius: 10px;
-  }
-  .player-avatar {
-    width: 36px; height: 36px; border-radius: 50%;
-    background: linear-gradient(135deg, var(--verde-oscuro), var(--verde));
-    display: flex; align-items: center; justify-content: center;
-    font-weight: 700; font-size: 0.85rem; color: #0a1628; flex-shrink: 0;
-  }
-  .player-name { flex: 1; font-weight: 600; }
-  .player-countries { font-size: 0.78rem; color: var(--gris); }
+  /* BUTTONS */
+  .btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border-radius:9px;
+    font-family:'Figtree',sans-serif;font-weight:700;font-size:.88rem;cursor:pointer;border:none;transition:all .18s;white-space:nowrap}
+  .btn-verde{background:var(--verde);color:#0a1628}
+  .btn-verde:hover{background:#00e676;transform:translateY(-1px)}
+  .btn-oro{background:var(--oro);color:#0a1628}
+  .btn-rojo{background:var(--rojo);color:#fff}
+  .btn-outline{background:transparent;border:1.5px solid var(--borde);color:var(--gris)}
+  .btn-outline:hover{border-color:var(--verde);color:var(--verde)}
+  .btn-sm{padding:5px 11px;font-size:.78rem;border-radius:7px}
+  .btn-wa{background:#25D366;color:#fff;font-size:.95rem;padding:12px 24px;border-radius:13px;
+    border:none;cursor:pointer;font-weight:700;font-family:'Figtree',sans-serif;
+    display:flex;align-items:center;gap:8px;transition:all .2s}
+  .btn-wa:hover{background:#20ba58;transform:translateY(-2px);box-shadow:0 8px 24px rgba(37,211,102,.35)}
 
-  /* ──── PAÍSES ──── */
-  .paises-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 8px; margin-top: 10px;
-  }
-  .pais-chip {
-    display: flex; align-items: center; gap: 7px;
-    background: var(--fondo2); border: 1.5px solid var(--borde);
-    padding: 7px 10px; border-radius: 8px; font-size: 0.82rem;
-    cursor: pointer; transition: all 0.15s; user-select: none;
-  }
-  .pais-chip:hover { border-color: var(--verde); background: rgba(0,200,83,0.07); }
-  .pais-chip.asignado {
-    border-color: #1e3060; opacity: 0.45; cursor: default; pointer-events: none;
-  }
-  .pais-chip.compartido {
-    border-color: rgba(255,214,0,0.5); background: rgba(255,214,0,0.06);
-  }
-  .pais-chip.compartido:hover { border-color: var(--oro); background: rgba(255,214,0,0.13); }
-  .pais-chip.seleccionado {
-    border-color: var(--oro); background: rgba(255,214,0,0.1);
-  }
-  .pais-flag { font-size: 1.1rem; }
-  .pais-nombre { font-size: 0.78rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  /* PLAYERS */
+  .player-list{display:flex;flex-direction:column;gap:7px;margin-top:9px}
+  .player-item{display:flex;align-items:center;gap:9px;background:var(--fondo2);
+    border:1px solid var(--borde);padding:9px 13px;border-radius:9px}
+  .player-avatar{width:34px;height:34px;border-radius:50%;
+    background:linear-gradient(135deg,var(--verde-oscuro),var(--verde));
+    display:flex;align-items:center;justify-content:center;
+    font-weight:700;font-size:.82rem;color:#0a1628;flex-shrink:0}
 
-  /* ──── RONDAS ──── */
-  .rondas-list { display: flex; flex-direction: column; gap: 10px; }
-  .ronda-item {
-    background: var(--fondo2); border: 1px solid var(--borde);
-    border-radius: 12px; padding: 12px 16px;
-  }
-  .ronda-header { display: flex; justify-content: space-between; align-items: center; }
-  .ronda-badge {
-    padding: 3px 10px; border-radius: 20px; font-size: 0.75rem;
-    font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
-  }
-  .badge-final { background: rgba(255,214,0,0.2); color: var(--oro); border: 1px solid var(--oro); }
-  .badge-semis { background: rgba(0,200,83,0.15); color: var(--verde); border: 1px solid var(--verde); }
-  .badge-cuartos { background: rgba(229,57,53,0.15); color: #ef9a9a; border: 1px solid var(--rojo); }
-  .badge-octavos { background: rgba(123,138,184,0.2); color: #b0bec5; border: 1px solid #546e7a; }
-  .badge-grupos { background: rgba(123,138,184,0.12); color: #78909c; border: 1px solid #37474f; }
+  /* PAÍSES */
+  .paises-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(135px,1fr));gap:7px;margin-top:9px}
+  .pais-chip{display:flex;align-items:center;gap:6px;background:var(--fondo2);
+    border:1.5px solid var(--borde);padding:6px 9px;border-radius:7px;
+    font-size:.8rem;cursor:pointer;transition:all .15s;user-select:none}
+  .pais-chip:hover{border-color:var(--verde);background:rgba(0,200,83,.07)}
+  .pais-chip.asignado{border-color:#1e3060;opacity:.4;cursor:default;pointer-events:none}
+  .pais-chip.compartido{border-color:rgba(255,214,0,.5);background:rgba(255,214,0,.06)}
+  .pais-chip.compartido:hover{border-color:var(--oro);background:rgba(255,214,0,.13)}
 
-  /* ──── ASIGNACIONES ──── */
-  .asignaciones-grid {
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 12px; margin-top: 12px;
-  }
-  .asig-card {
-    background: var(--fondo2); border: 1.5px solid var(--borde);
-    border-radius: 12px; padding: 14px;
-  }
-  .asig-card h4 { font-size: 0.95rem; font-weight: 700; margin-bottom: 8px; }
-  .asig-pais {
-    display: flex; align-items: center; gap: 8px;
-    padding: 5px 0; font-size: 0.82rem; border-bottom: 1px solid var(--borde);
-  }
-  .asig-pais:last-child { border-bottom: none; }
-  .asig-ronda {
-    margin-left: auto; font-size: 0.7rem; color: var(--gris);
-  }
+  /* BADGES */
+  .ronda-badge{padding:2px 9px;border-radius:20px;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:1px}
+  .badge-final{background:rgba(255,214,0,.2);color:var(--oro);border:1px solid var(--oro)}
+  .badge-semis{background:rgba(0,200,83,.15);color:var(--verde);border:1px solid var(--verde)}
+  .badge-cuartos{background:rgba(229,57,53,.15);color:#ef9a9a;border:1px solid var(--rojo)}
+  .badge-octavos{background:rgba(123,138,184,.2);color:#b0bec5;border:1px solid #546e7a}
+  .badge-grupos{background:rgba(123,138,184,.12);color:#78909c;border:1px solid #37474f}
 
-  /* ──── PUNTUACIÓN ──── */
-  .score-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
-  .score-table th {
-    background: var(--fondo); color: var(--gris); text-align: left;
-    padding: 10px 12px; font-weight: 600; border-bottom: 1.5px solid var(--borde);
-  }
-  .score-table td { padding: 10px 12px; border-bottom: 1px solid var(--borde); }
-  .score-table tr:last-child td { border-bottom: none; }
-  .score-table tr:hover td { background: rgba(255,255,255,0.02); }
-  .rank-1 { color: var(--oro); font-weight: 700; }
-  .rank-2 { color: #b0bec5; }
-  .rank-3 { color: #cd7f32; }
-  .pts-badge {
-    display: inline-block; background: rgba(0,200,83,0.15);
-    color: var(--verde); border-radius: 6px; padding: 2px 8px;
-    font-weight: 700; font-size: 0.8rem;
-  }
+  /* ASIGNACIONES */
+  .asignaciones-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:11px;margin-top:11px}
+  .asig-card{background:var(--fondo2);border:1.5px solid var(--borde);border-radius:11px;padding:13px}
+  .asig-card h4{font-size:.92rem;font-weight:700;margin-bottom:7px}
+  .asig-pais{display:flex;align-items:center;gap:7px;padding:4px 0;font-size:.8rem;border-bottom:1px solid var(--borde)}
+  .asig-pais:last-child{border-bottom:none}
 
-  /* ──── WHATSAPP PREVIEW ──── */
-  .wa-preview {
-    background: #0b1f0e;
-    border: 1.5px solid #1a3d1f;
-    border-radius: 16px; padding: 20px;
-    font-family: 'Helvetica Neue', sans-serif;
-    font-size: 0.88rem; line-height: 1.5;
-    white-space: pre-line;
-    color: #d4e8d4;
-    max-height: 380px; overflow-y: auto;
-    margin-top: 14px;
-  }
-  .wa-bubble {
-    background: #1e3d22; border-radius: 10px 10px 10px 2px;
-    display: inline-block; padding: 12px 14px; max-width: 95%;
-    margin-bottom: 4px;
-  }
-  .wa-time { font-size: 0.7rem; color: #6a9870; margin-top: 4px; text-align: right; }
+  /* RANKING */
+  .rank-1{color:var(--oro);font-weight:700}
+  .rank-2{color:#b0bec5}
+  .rank-3{color:#cd7f32}
+  .pts-badge{display:inline-block;background:rgba(0,200,83,.15);color:var(--verde);
+    border-radius:6px;padding:2px 8px;font-weight:700;font-size:.8rem}
 
-  /* ──── MISC ──── */
-  .flex-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
-  .label { font-size: 0.8rem; color: var(--gris); margin-bottom: 5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
-  .tag-verde { color: var(--verde); font-weight: 700; }
-  .tag-oro { color: var(--oro); font-weight: 700; }
-  .divider { border: none; border-top: 1px solid var(--borde); margin: 18px 0; }
-  .empty { text-align: center; color: var(--gris); padding: 30px; font-size: 0.9rem; }
-  .alert {
-    background: rgba(255,214,0,0.1); border: 1px solid rgba(255,214,0,0.3);
-    border-radius: 10px; padding: 10px 14px; font-size: 0.85rem;
-    color: var(--oro); margin-bottom: 14px;
-  }
-  .step-num {
-    display: inline-flex; align-items: center; justify-content: center;
-    width: 26px; height: 26px; border-radius: 50%;
-    background: var(--verde); color: #0a1628;
-    font-weight: 700; font-size: 0.8rem; flex-shrink: 0;
-  }
-  .step-row { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 12px; }
-  .step-text { font-size: 0.88rem; padding-top: 3px; }
+  /* WA PREVIEW */
+  .wa-preview{background:#0b1f0e;border:1.5px solid #1a3d1f;border-radius:14px;padding:18px;
+    font-family:'Helvetica Neue',sans-serif;font-size:.86rem;line-height:1.5;
+    white-space:pre-line;color:#d4e8d4;max-height:360px;overflow-y:auto;margin-top:13px}
+  .wa-bubble{background:#1e3d22;border-radius:10px 10px 10px 2px;
+    display:inline-block;padding:11px 13px;max-width:95%;margin-bottom:4px}
+  .wa-time{font-size:.68rem;color:#6a9870;margin-top:3px;text-align:right}
 
-  .country-search {
-    margin-bottom: 10px;
-  }
-
-  .sorteo-selector {
-    display: flex; flex-direction: column; gap: 14px;
-  }
-  .selector-jugador {
-    background: var(--fondo2); border: 1.5px solid var(--borde);
-    border-radius: 12px; padding: 14px;
-  }
-  .selector-jugador h4 {
-    font-size: 0.9rem; font-weight: 700; margin-bottom: 10px;
-    display: flex; align-items: center; gap: 8px;
-  }
-  .selected-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
-  .s-chip {
-    background: rgba(0,200,83,0.15); border: 1px solid var(--verde);
-    border-radius: 20px; padding: 3px 10px; font-size: 0.77rem;
-    display: flex; align-items: center; gap: 4px;
-  }
-  .s-chip .rm { cursor: pointer; color: var(--gris); font-size: 0.8rem; }
-  .s-chip .rm:hover { color: var(--rojo); }
+  /* MISC */
+  .label{font-size:.78rem;color:var(--gris);margin-bottom:4px;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+  .divider{border:none;border-top:1px solid var(--borde);margin:16px 0}
+  .empty{text-align:center;color:var(--gris);padding:28px;font-size:.88rem}
+  .alert{background:rgba(255,214,0,.1);border:1px solid rgba(255,214,0,.3);
+    border-radius:9px;padding:9px 13px;font-size:.83rem;color:var(--oro);margin-bottom:13px}
+  .saving{position:fixed;bottom:16px;right:16px;background:var(--verde);color:#0a1628;
+    border-radius:20px;padding:6px 14px;font-size:.78rem;font-weight:700;
+    z-index:999;opacity:0;transition:opacity .3s;pointer-events:none}
+  .saving.show{opacity:1}
+  .readonly-notice{background:rgba(123,138,184,.1);border:1px solid rgba(123,138,184,.3);
+    border-radius:9px;padding:9px 13px;font-size:.82rem;color:var(--gris);margin-bottom:13px;text-align:center}
 
   @media(max-width:600px){
-    .paises-grid { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); }
-    .asignaciones-grid { grid-template-columns: 1fr; }
+    .paises-grid{grid-template-columns:repeat(auto-fill,minmax(105px,1fr))}
+    .asignaciones-grid{grid-template-columns:1fr}
   }
 </style>
 </head>
 <body>
 
+<!-- AUTH BAR -->
+<div id="authBar">
+  <div id="authAnon" class="user-info">👁 Solo lectura</div>
+  <div id="authUser" class="user-info" style="display:none">
+    <img id="userPhoto" src="" alt="">
+    <span id="userName"></span>
+    <button class="btn-logout" onclick="logout()">Salir</button>
+  </div>
+  <button id="btnLogin" class="btn-google" onclick="loginGoogle()">
+    <svg width="16" height="16" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+    Entrar como admin
+  </button>
+</div>
+
 <header>
   <div class="trophy">🏆</div>
   <h1>Mundial WhatsApp</h1>
-  <p>Elige 5 países con hándicap — solo puntúan si superan su fase mínima</p>
+  <p>Elige 5 países con hándicap — ranking en tiempo real</p>
 </header>
 
 <div class="tabs">
-  <button class="tab-btn active" onclick="showTab('config')">⚙️ Config</button>
-  <button class="tab-btn" onclick="showTab('jugadores')">👥 Jugadores</button>
-  <button class="tab-btn" onclick="showTab('paises')">🌍 Países</button>
-  <button class="tab-btn" onclick="showTab('sorteo')">🎲 Sorteo</button>
-  <button class="tab-btn" onclick="showTab('scores')">📊 Puntos</button>
-  <button class="tab-btn" onclick="showTab('whatsapp')">💬 WhatsApp</button>
+  <button class="tab-btn active" onclick="showTab('scores',this)">📊 Clasificación</button>
+  <button class="tab-btn admin-only" onclick="showTab('config',this)">⚙️ Config</button>
+  <button class="tab-btn admin-only" onclick="showTab('jugadores',this)">👥 Jugadores</button>
+  <button class="tab-btn admin-only" onclick="showTab('paises',this)">🌍 Países</button>
+  <button class="tab-btn admin-only" onclick="showTab('sorteo',this)">🎲 Sorteo</button>
+  <button class="tab-btn admin-only" onclick="showTab('resultados',this)">⚽ Resultados</button>
+  <button class="tab-btn" onclick="showTab('whatsapp',this)">💬 WhatsApp</button>
 </div>
 
 <div class="content">
 
-  <!-- ════ TAB: CONFIG ════ -->
-  <div id="tab-config" class="tab-panel active">
+  <!-- ════ CLASIFICACIÓN (pública) ════ -->
+  <div id="tab-scores" class="tab-panel active">
+    <div id="rankingPublico">
+      <div class="empty">Cargando datos…</div>
+    </div>
+  </div>
+
+  <!-- ════ CONFIG (admin) ════ -->
+  <div id="tab-config" class="tab-panel">
     <div class="card">
-      <h2>🏆 Configuración del Torneo</h2>
-      <div class="step-row"><span class="step-num">1</span><span class="step-text">Escribe el nombre del grupo y del torneo</span></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
-        <div>
-          <div class="label">Nombre del grupo WhatsApp</div>
-          <input type="text" id="grupoNombre" value="⚽ Amigos del Mundial" placeholder="Mi Grupo WA">
-        </div>
-        <div>
-          <div class="label">Torneo</div>
-          <input type="text" id="torneoNombre" value="Mundial 2026 🇺🇸🇨🇦🇲🇽" placeholder="Mundial 2026">
-        </div>
+      <h2>⚙️ Configuración</h2>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:13px">
+        <div><div class="label">Nombre del grupo</div>
+          <input type="text" id="grupoNombre" value="⚽ Amigos del Mundial"></div>
+        <div><div class="label">Torneo</div>
+          <input type="text" id="torneoNombre" value="Mundial 2026 🇺🇸🇨🇦🇲🇽"></div>
       </div>
       <hr class="divider">
-      <h3>📌 Puntuación por fase</h3>
-      <p style="font-size:0.82rem;color:var(--gris);margin-bottom:12px">Puntos que suma un país por cada fase que alcanza (si superó su hándicap)</p>
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px">
-        <div>
-          <div class="label">🥈 Finalista</div>
-          <input type="number" id="pts_finalista" value="25" min="0">
-        </div>
-        <div>
-          <div class="label">🥉 Semis (x2)</div>
-          <input type="number" id="pts_semis" value="15" min="0">
-        </div>
-        <div>
-          <div class="label">⚡ Cuartos (x4)</div>
-          <input type="number" id="pts_cuartos" value="8" min="0">
-        </div>
-        <div>
-          <div class="label">🔥 Octavos (x8)</div>
-          <input type="number" id="pts_octavos" value="4" min="0">
-        </div>
-        <div>
-          <div class="label">✅ Dieciseisavos (x16)</div>
-          <input type="number" id="pts_dieciseisavos" value="2" min="0">
-        </div>
+      <h3>💰 Puntos por fase</h3>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:9px;margin-bottom:13px">
+        <div><div class="label">🥈 Finalista</div><input type="number" id="pts_finalista" value="25" min="0"></div>
+        <div><div class="label">🥉 Semis</div><input type="number" id="pts_semis" value="15" min="0"></div>
+        <div><div class="label">⚡ Cuartos</div><input type="number" id="pts_cuartos" value="8" min="0"></div>
+        <div><div class="label">🔥 Octavos</div><input type="number" id="pts_octavos" value="4" min="0"></div>
+        <div><div class="label">✅ Dieciseisavos</div><input type="number" id="pts_dieciseisavos" value="2" min="0"></div>
       </div>
       <hr class="divider">
       <h3>🎯 Países por jugador</h3>
-      <p style="font-size:0.82rem;color:var(--gris);margin-bottom:12px">Cuántos países elige cada jugador (cada uno con su hándicap)</p>
-      <div style="max-width:200px">
+      <div style="max-width:180px;margin-bottom:13px">
         <div class="label">Número de picks</div>
         <input type="number" id="numPicks" value="5" min="1" max="20">
       </div>
       <hr class="divider">
-      <button class="btn btn-verde" onclick="guardarConfig()">💾 Guardar configuración</button>
-      <span id="config-ok" style="color:var(--verde);font-size:0.85rem;margin-left:12px;display:none">✓ Guardado</span>
-    </div>
-    <div class="card" style="border-color:rgba(0,200,83,0.25)">
-      <h2>📋 Cómo funciona</h2>
-      <div class="step-row"><span class="step-num">1</span><span class="step-text"><b>Config</b> – Define nombre del grupo, puntos y cuántos países elige cada jugador por ronda.</span></div>
-      <div class="step-row"><span class="step-num">2</span><span class="step-text"><b>Jugadores</b> – Agrega a los miembros del grupo de WhatsApp.</span></div>
-      <div class="step-row"><span class="step-num">3</span><span class="step-text"><b>Países</b> – Edita la lista de los 32/48 países clasificados.</span></div>
-      <div class="step-row"><span class="step-num">4</span><span class="step-text"><b>Sorteo</b> – Cada jugador elige 5 países y fija el <b>hándicap</b> de cada uno (fase mínima que debe alcanzar). Si no llega → 0 pts. Si supera → suma puntos de esa fase y todas las superiores.</span></div>
-      <div class="step-row"><span class="step-num">5</span><span class="step-text"><b>Puntos</b> – Registra resultados y ve el marcador en tiempo real.</span></div>
-      <div class="step-row"><span class="step-num">6</span><span class="step-text"><b>WhatsApp</b> – Genera mensajes listos para pegar en tu grupo.</span></div>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+        <button class="btn btn-verde" onclick="guardarConfig()">💾 Guardar</button>
+        <span id="config-ok" style="color:var(--verde);font-size:.83rem;display:none">✓ Guardado</span>
+        <button class="btn btn-rojo btn-sm" style="margin-left:auto" onclick="borrarTodo()">🗑 Borrar todo</button>
+      </div>
     </div>
   </div>
 
-  <!-- ════ TAB: JUGADORES ════ -->
+  <!-- ════ JUGADORES (admin) ════ -->
   <div id="tab-jugadores" class="tab-panel">
     <div class="card">
-      <h2>👥 Jugadores del Grupo</h2>
+      <h2>👥 Jugadores</h2>
       <div class="input-row">
-        <input type="text" id="nuevoJugador" placeholder="Nombre del jugador (ej: Carlos 🐺)" onkeydown="if(event.key==='Enter')agregarJugador()">
+        <input type="text" id="nuevoJugador" placeholder="Nombre del jugador" onkeydown="if(event.key==='Enter')agregarJugador()">
         <button class="btn btn-verde" onclick="agregarJugador()">+ Agregar</button>
       </div>
-      <div class="player-list" id="playerList">
-        <div class="empty">Agrega jugadores para comenzar</div>
-      </div>
+      <div class="player-list" id="playerList"><div class="empty">Sin jugadores</div></div>
     </div>
     <div class="card">
-      <h2>⚡ Agregar varios a la vez</h2>
+      <h2>⚡ Varios a la vez</h2>
       <div class="label">Un nombre por línea</div>
-      <textarea id="bulkJugadores" placeholder="Carlos&#10;María&#10;Pedro&#10;Ana"></textarea>
-      <div style="margin-top:10px">
-        <button class="btn btn-oro" onclick="agregarBulk()">+ Agregar todos</button>
-      </div>
+      <textarea id="bulkJugadores" placeholder="Carlos&#10;María&#10;Pedro"></textarea>
+      <div style="margin-top:9px"><button class="btn btn-oro" onclick="agregarBulk()">+ Agregar todos</button></div>
     </div>
   </div>
 
-  <!-- ════ TAB: PAÍSES ════ -->
+  <!-- ════ PAÍSES (admin) ════ -->
   <div id="tab-paises" class="tab-panel">
     <div class="card">
       <h2>🌍 Países Clasificados</h2>
-      <div class="alert">⚽ Mundial 2026 incluye <b>48 países</b>. Puedes ajustar la lista según el torneo real.</div>
-      <div class="input-row country-search">
-        <input type="text" id="paisBuscar" placeholder="🔍 Buscar país..." oninput="filtrarPaises()">
-        <button class="btn btn-outline btn-sm" onclick="resetPaises()">↺ Restablecer</button>
+      <div class="alert">⚽ Mundial 2026 — 48 países. Edita la lista según los clasificados reales.</div>
+      <div style="display:flex;gap:8px;margin-bottom:10px">
+        <input type="text" id="paisBuscar" placeholder="🔍 Buscar…" oninput="filtrarPaises()">
+        <button class="btn btn-outline btn-sm" onclick="resetPaises()">↺ Reset</button>
       </div>
-      <div class="input-row" style="margin-bottom:12px">
-        <input type="text" id="nuevoPais" placeholder="🏴 Nuevo país (ej: 🇪🇸 España)">
-        <button class="btn btn-verde btn-sm" onclick="agregarPais()">+ País</button>
+      <div class="input-row">
+        <input type="text" id="nuevoPais" placeholder="🏴 Nuevo país">
+        <button class="btn btn-verde btn-sm" onclick="agregarPais()">+ Añadir</button>
       </div>
       <div class="paises-grid" id="paisesGrid"></div>
     </div>
   </div>
 
-  <!-- ════ TAB: SORTEO ════ -->
+  <!-- ════ SORTEO (admin) ════ -->
   <div id="tab-sorteo" class="tab-panel">
     <div class="card">
       <h2>🎲 Draft de Países</h2>
-      <p style="font-size:0.85rem;color:var(--gris);margin-bottom:16px">
-        Cada jugador elige sus países por ronda. Empieza desde el <b class="tag-oro">Campeón</b> hacia <b class="tag-verde">Fase de Grupos</b>.
+      <p style="font-size:.83rem;color:var(--gris);margin-bottom:14px">
+        Cada jugador elige <strong id="numPicksLabel">5</strong> países y le asigna un hándicap a cada uno.<br>
+        <span style="color:var(--oro)">⚡ = país disponible aunque otro lo tenga (hándicap finalista)</span>
       </p>
-      <div class="rondas-list" id="rondasSelector"></div>
+      <div id="rondasSelector"></div>
     </div>
     <div class="card">
-      <h2>📋 Resumen de Asignaciones</h2>
-      <div class="asignaciones-grid" id="asignacionesGrid">
-        <div class="empty">El sorteo aparecerá aquí</div>
-      </div>
+      <h2>📋 Resumen</h2>
+      <div class="asignaciones-grid" id="asignacionesGrid"><div class="empty">Sin asignaciones</div></div>
     </div>
   </div>
 
-  <!-- ════ TAB: PUNTUACIÓN ════ -->
-  <div id="tab-scores" class="tab-panel">
-    <!-- Ranking siempre visible -->
+  <!-- ════ RESULTADOS (admin) ════ -->
+  <div id="tab-resultados" class="tab-panel">
     <div class="card">
-      <h2>📊 Clasificación</h2>
-      <div id="tablaScores"><div class="empty">Completa el sorteo para ver la clasificación</div></div>
-    </div>
-    <!-- Registro por fase -->
-    <div class="card">
-      <h2>⚽ Registrar avance por fase</h2>
-      <p style="font-size:0.82rem;color:var(--gris);margin-bottom:14px">
-        Selecciona la fase por la que quieres introducir resultados y marca los países que pasaron.
-        Los países apostados por algún jugador aparecen <span style="color:var(--oro)">destacados ⚡</span>.
+      <h2>⚽ Registrar Avance por Fase</h2>
+      <p style="font-size:.82rem;color:var(--gris);margin-bottom:13px">
+        Selecciona la fase y marca los países que pasaron. <span style="color:var(--oro)">⚡ = apostado por algún jugador.</span>
       </p>
-      <!-- Selector de fase activa -->
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px" id="faseSelector"></div>
+      <div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px" id="faseSelector"></div>
       <div id="resultadosPanel"></div>
     </div>
   </div>
 
-  <!-- ════ TAB: WHATSAPP ════ -->
+  <!-- ════ WHATSAPP ════ -->
   <div id="tab-whatsapp" class="tab-panel">
     <div class="card">
       <h2>💬 Mensajes para WhatsApp</h2>
-      <p style="font-size:0.85rem;color:var(--gris);margin-bottom:16px">Genera mensajes listos para pegar en tu grupo.</p>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
+      <div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px">
         <button class="btn btn-outline" onclick="genMsgBienvenida()">🎉 Bienvenida</button>
-        <button class="btn btn-outline" onclick="genMsgAsignaciones()">📋 Asignaciones</button>
+        <button class="btn btn-outline" onclick="genMsgAsignaciones()">📋 Picks</button>
         <button class="btn btn-outline" onclick="genMsgRanking()">🏆 Ranking</button>
         <button class="btn btn-outline" onclick="genMsgReglas()">📜 Reglas</button>
       </div>
       <div id="waPreviewContainer" style="display:none">
         <div class="wa-preview" id="waPreview"></div>
-        <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap">
+        <div style="display:flex;gap:9px;margin-top:11px;flex-wrap:wrap">
           <button class="btn-wa" onclick="copiarMensaje()">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M17.498 14.382c-.301-.15-1.767-.867-2.04-.966-.273-.101-.473-.15-.673.15-.197.295-.771.964-.944 1.162-.175.195-.349.21-.646.075-.3-.15-1.263-.465-2.403-1.485-.888-.795-1.484-1.77-1.66-2.07-.174-.3-.019-.465.13-.615.136-.135.301-.345.451-.523.146-.181.194-.301.297-.496.1-.21.049-.375-.025-.524-.075-.15-.672-1.62-.922-2.206-.24-.584-.487-.51-.672-.51-.172-.015-.371-.015-.571-.015-.2 0-.523.074-.797.359-.273.3-1.045 1.02-1.045 2.475s1.07 2.865 1.219 3.075c.149.195 2.105 3.195 5.1 4.485.714.3 1.27.48 1.704.629.714.227 1.365.195 1.88.121.574-.091 1.767-.721 2.016-1.426.255-.705.255-1.29.18-1.425-.074-.135-.27-.21-.57-.345z"/><path d="M20.52 3.449C12.831-3.984.106 1.407.101 11.893c0 2.096.549 4.14 1.595 5.945L0 24l6.335-1.652c1.746.943 3.71 1.444 5.71 1.447h.006c9.503 0 15.313-7.773 13.077-14.853-.539-1.695-1.512-3.188-2.608-4.493z"/></svg>
-            Copiar mensaje
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M17.498 14.382c-.301-.15-1.767-.867-2.04-.966-.273-.101-.473-.15-.673.15-.197.295-.771.964-.944 1.162-.175.195-.349.21-.646.075-.3-.15-1.263-.465-2.403-1.485-.888-.795-1.484-1.77-1.66-2.07-.174-.3-.019-.465.13-.615.136-.135.301-.345.451-.523.146-.181.194-.301.297-.496.1-.21.049-.375-.025-.524-.075-.15-.672-1.62-.922-2.206-.24-.584-.487-.51-.672-.51-.172-.015-.371-.015-.571-.015-.2 0-.523.074-.797.359-.273.3-1.045 1.02-1.045 2.475s1.07 2.865 1.219 3.075c.149.195 2.105 3.195 5.1 4.485.714.3 1.27.48 1.704.629.714.227 1.365.195 1.88.121.574-.091 1.767-.721 2.016-1.426.255-.705.255-1.29.18-1.425-.074-.135-.27-.21-.57-.345z"/><path d="M20.52 3.449C12.831-3.984.106 1.407.101 11.893c0 2.096.549 4.14 1.595 5.945L0 24l6.335-1.652c1.746.943 3.71 1.444 5.71 1.447h.006c9.503 0 15.313-7.773 13.077-14.853-.539-1.695-1.512-3.188-2.608-4.493z"/></svg>
+            Copiar
           </button>
-          <button class="btn btn-outline" onclick="abrirWA()">📲 Abrir WhatsApp Web</button>
         </div>
       </div>
-      <div id="waEmpty" class="empty">Selecciona un tipo de mensaje arriba</div>
+      <div id="waEmpty" class="empty">Selecciona un tipo de mensaje</div>
     </div>
   </div>
 
 </div>
 
-<script>
-// ════════════ ESTADO ════════════
+<!-- SAVING TOAST -->
+<div class="saving" id="savingToast">💾 Guardado</div>
+
+<!-- FIREBASE SDK -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, doc, getDoc, setDoc, onSnapshot, collection, getDocs }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+// ── CONFIG FIREBASE ──
+const firebaseConfig = {
+  apiKey: "AIzaSyD--0J7a1i-Bghdsp3gItyj83NkAnulR14",
+  authDomain: "mundialwhatsapp-20090.firebaseapp.com",
+  projectId: "mundialwhatsapp-20090",
+  storageBucket: "mundialwhatsapp-20090.firebasestorage.app",
+  messagingSenderId: "661491833689",
+  appId: "1:661491833689:web:ec02706d888a7f0f540a48"
+};
+
+// UID del administrador — se rellena automáticamente la primera vez que haces login
+// Después de hacer login por primera vez, copia tu UID del alert y reemplaza '' aquí.
+const ADMIN_UID = '';  // ← pondrás aquí tu UID tras el primer login
+
+const app   = initializeApp(firebaseConfig);
+const db    = getFirestore(app);
+const auth  = getAuth(app);
+
+// ── REFERENCIAS FIRESTORE ──
+const REF = {
+  config:       ()=> doc(db,'mundial','config'),
+  jugadores:    ()=> doc(db,'mundial','jugadores'),
+  paises:       ()=> doc(db,'mundial','paises'),
+  asignaciones: ()=> doc(db,'mundial','asignaciones'),
+  resultados:   ()=> doc(db,'mundial','resultados'),
+};
+
+// ── ESTADO LOCAL ──
+const RONDAS   = ['dieciseisavos','octavos','cuartos','semis','finalista'];
+const RLABELS  = {finalista:'🥈 Finalista',semis:'🥉 Semifinales',cuartos:'⚡ Cuartos',octavos:'🔥 Octavos',dieciseisavos:'✅ Dieciseisavos'};
+const JERARQUIA= ['dieciseisavos','octavos','cuartos','semis','finalista'];
+
 let state = {
-  config: {
-    grupoNombre: '⚽ Amigos del Mundial',
-    torneoNombre: 'Mundial 2026 🇺🇸🇨🇦🇲🇽',
-    puntos: { finalista:25, semis:15, cuartos:8, octavos:4, dieciseisavos:2 },
-    numPicks: 5  // países por jugador
-  },
-  jugadores: [],
-  paises: [...PAISES_DEFAULT()],
-  // asignaciones: { jugador: [ {key, handicap}, ... ] }  — array de hasta numPicks entradas
-  asignaciones: {},
-  // resultados: { paisKey: faseAlcanzada }  — string con la fase más alta alcanzada
-  resultados: {}
+  config:{ grupoNombre:'⚽ Amigos del Mundial', torneoNombre:'Mundial 2026 🇺🇸🇨🇦🇲🇽',
+           puntos:{finalista:25,semis:15,cuartos:8,octavos:4,dieciseisavos:2}, numPicks:5 },
+  jugadores:[], paises:[...PAISES_DEFAULT()], asignaciones:{}, resultados:{}
+};
+let isAdmin = false;
+let faseActiva = 'dieciseisavos';
+
+// ── AUTH ──
+window.loginGoogle = async ()=>{
+  try{
+    const prov = new GoogleAuthProvider();
+    const res  = await signInWithPopup(auth, prov);
+    if(ADMIN_UID === ''){
+      alert('Tu UID de administrador es:\n\n' + res.user.uid + '\n\nCopia este valor y pégalo en el código donde dice ADMIN_UID, luego vuelve a subir el archivo a GitHub.');
+    }
+  }catch(e){ alert('Error al iniciar sesión: '+e.message); }
+};
+window.logout = ()=> signOut(auth);
+
+onAuthStateChanged(auth, user=>{
+  const bar = document.getElementById;
+  if(user){
+    document.getElementById('authAnon').style.display='none';
+    document.getElementById('authUser').style.display='flex';
+    document.getElementById('btnLogin').style.display='none';
+    document.getElementById('userName').textContent = user.displayName||user.email;
+    document.getElementById('userPhoto').src = user.photoURL||'';
+    isAdmin = (ADMIN_UID !== '' && user.uid === ADMIN_UID) || ADMIN_UID === '';
+    if(isAdmin) document.body.classList.add('is-admin');
+    else document.body.classList.remove('is-admin');
+  } else {
+    document.getElementById('authAnon').style.display='flex';
+    document.getElementById('authUser').style.display='none';
+    document.getElementById('btnLogin').style.display='flex';
+    isAdmin = false;
+    document.body.classList.remove('is-admin');
+  }
+});
+
+// ── FIRESTORE: ESCUCHA EN TIEMPO REAL ──
+function listenAll(){
+  const docs = ['config','jugadores','paises','asignaciones','resultados'];
+  docs.forEach(key=>{
+    onSnapshot(REF[key](), snap=>{
+      if(snap.exists()){
+        const data = snap.data();
+        if(key==='config')       { state.config = {...state.config,...data}; syncConfigUI(); }
+        else if(key==='jugadores')  state.jugadores = data.lista||[];
+        else if(key==='paises')     state.paises    = data.lista||[];
+        else if(key==='asignaciones') state.asignaciones = data.mapa||{};
+        else if(key==='resultados')   state.resultados   = data.mapa||{};
+      }
+      reRenderAll();
+    });
+  });
+}
+
+function syncConfigUI(){
+  ['grupoNombre','torneoNombre'].forEach(id=>{
+    let el=document.getElementById(id); if(el) el.value=state.config[id]||'';
+  });
+  ['finalista','semis','cuartos','octavos','dieciseisavos'].forEach(r=>{
+    let el=document.getElementById('pts_'+r); if(el) el.value=state.config.puntos[r]||0;
+  });
+  let np=document.getElementById('numPicks'); if(np) np.value=state.config.numPicks||5;
+  let nl=document.getElementById('numPicksLabel'); if(nl) nl.textContent=state.config.numPicks||5;
+}
+
+// ── GUARDAR EN FIRESTORE ──
+async function saveKey(key, data){
+  try{
+    await setDoc(REF[key](), data, {merge:true});
+    showToast();
+  }catch(e){ console.error('Error guardando '+key, e); }
+}
+
+function showToast(){
+  let t=document.getElementById('savingToast');
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),1800);
+}
+
+// ── RE-RENDER ──
+function reRenderAll(){
+  renderRankingPublico();
+  if(document.getElementById('tab-jugadores').classList.contains('active')) renderJugadores();
+  if(document.getElementById('tab-paises').classList.contains('active'))    renderPaises();
+  if(document.getElementById('tab-sorteo').classList.contains('active'))    renderSorteo();
+  if(document.getElementById('tab-resultados').classList.contains('active')){ renderFaseSelector(); renderResultadosPanel(); }
+  if(document.getElementById('tab-whatsapp').classList.contains('active'));
+}
+
+// ── TABS ──
+window.showTab = (id, btn)=>{
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  if(btn) btn.classList.add('active');
+  if(id==='scores')     renderRankingPublico();
+  if(id==='jugadores')  renderJugadores();
+  if(id==='paises')     renderPaises();
+  if(id==='sorteo')     renderSorteo();
+  if(id==='resultados'){ renderFaseSelector(); renderResultadosPanel(); }
 };
 
-// Fases de menor a mayor
-const RONDAS = ['dieciseisavos','octavos','cuartos','semis','finalista'];
-const RONDA_LABELS = {
-  finalista:'🥈 Finalista',
-  semis:'🥉 Semifinales',
-  cuartos:'⚡ Cuartos de final',
-  octavos:'🔥 Octavos de final',
-  dieciseisavos:'✅ Dieciseisavos de final'
-};
-const BADGE_CLASS = {
-  finalista:'badge-final', semis:'badge-semis',
-  cuartos:'badge-cuartos', octavos:'badge-octavos',
-  dieciseisavos:'badge-grupos'
-};
-// Jerarquía ascendente: índice mayor = fase más avanzada
-const JERARQUIA = ['dieciseisavos','octavos','cuartos','semis','finalista'];
+// ── HELPERS ──
+function paisKey(p){ return p.flag+p.nombre; }
+function nivelFase(f){ return JERARQUIA.indexOf(f); }
+function faseAlcanzada(key){ return state.resultados[key]||null; }
+function superaHandicap(key, handicap){
+  let a=faseAlcanzada(key); if(!a) return false;
+  return nivelFase(a) >= nivelFase(handicap);
+}
+function calcPuntos(jug){
+  let picks=state.asignaciones[jug]||[], pts=0;
+  picks.forEach(({key,handicap})=>{
+    if(!superaHandicap(key,handicap)) return;
+    let a=faseAlcanzada(key);
+    RONDAS.forEach(r=>{ if(nivelFase(r)<=nivelFase(a)) pts+=state.config.puntos[r]||0; });
+  });
+  return pts;
+}
+function getPaisesElegidos(){
+  let s=new Set();
+  Object.values(state.asignaciones).forEach(ps=>(ps||[]).forEach(({key})=>s.add(key)));
+  return s;
+}
+function ini(nombre){ return nombre.replace(/[^\p{L}\p{N}]/gu,'').slice(0,2).toUpperCase()||nombre.slice(0,2).toUpperCase(); }
 
-// ════════════ PAÍSES DEFAULT ════════════
+// ── CONFIG ──
+window.guardarConfig = async ()=>{
+  state.config.grupoNombre  = document.getElementById('grupoNombre').value;
+  state.config.torneoNombre = document.getElementById('torneoNombre').value;
+  state.config.numPicks     = parseInt(document.getElementById('numPicks').value)||5;
+  ['finalista','semis','cuartos','octavos','dieciseisavos'].forEach(r=>{
+    state.config.puntos[r] = parseInt(document.getElementById('pts_'+r).value)||0;
+  });
+  await saveKey('config', state.config);
+  let ok=document.getElementById('config-ok'); ok.style.display='inline';
+  setTimeout(()=>ok.style.display='none',2000);
+};
+
+window.borrarTodo = async ()=>{
+  if(!confirm('⚠️ ¿Borrar TODOS los datos? No se puede deshacer.')) return;
+  const empties = {
+    config: state.config,
+    jugadores:{lista:[]}, paises:{lista:[...PAISES_DEFAULT()]},
+    asignaciones:{mapa:{}}, resultados:{mapa:{}}
+  };
+  for(let k of Object.keys(empties)) await saveKey(k, empties[k]);
+};
+
+// ── JUGADORES ──
+window.agregarJugador = async ()=>{
+  let inp=document.getElementById('nuevoJugador'), n=inp.value.trim(); if(!n) return;
+  if(state.jugadores.includes(n)){ alert('Ya existe'); return; }
+  state.jugadores.push(n); inp.value='';
+  await saveKey('jugadores',{lista:state.jugadores});
+};
+window.eliminarJugador = async i=>{
+  let n=state.jugadores[i];
+  state.jugadores.splice(i,1);
+  let asig={...state.asignaciones}; delete asig[n];
+  state.asignaciones=asig;
+  await saveKey('jugadores',{lista:state.jugadores});
+  await saveKey('asignaciones',{mapa:state.asignaciones});
+};
+window.agregarBulk = async ()=>{
+  let lines=document.getElementById('bulkJugadores').value.split('\n').map(s=>s.trim()).filter(Boolean);
+  lines.forEach(n=>{ if(!state.jugadores.includes(n)) state.jugadores.push(n); });
+  document.getElementById('bulkJugadores').value='';
+  await saveKey('jugadores',{lista:state.jugadores});
+};
+
+function renderJugadores(){
+  let div=document.getElementById('playerList');
+  if(!state.jugadores.length){ div.innerHTML='<div class="empty">Sin jugadores</div>'; return; }
+  div.innerHTML=state.jugadores.map((j,i)=>`
+    <div class="player-item">
+      <div class="player-avatar">${ini(j)}</div>
+      <div style="flex:1">
+        <div style="font-weight:600">${j}</div>
+        <div style="font-size:.75rem;color:var(--gris)">${(state.asignaciones[j]||[]).length} de ${state.config.numPicks} países</div>
+      </div>
+      <button class="btn btn-rojo btn-sm" onclick="eliminarJugador(${i})">✕</button>
+    </div>`).join('');
+}
+
+// ── PAÍSES ──
+function renderPaises(filtro=''){
+  let grid=document.getElementById('paisesGrid');
+  let lista=state.paises.filter(p=>!filtro||(p.nombre+p.flag).toLowerCase().includes(filtro.toLowerCase()));
+  grid.innerHTML=lista.map((p)=>{
+    let idx=state.paises.findIndex(x=>paisKey(x)===paisKey(p));
+    return `<div class="pais-chip" title="${p.nombre}">
+      <span>${p.flag}</span>
+      <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.nombre}</span>
+      <span style="cursor:pointer;color:var(--gris);font-size:.72rem" onclick="quitarPais(${idx})">✕</span>
+    </div>`;
+  }).join('');
+  if(!lista.length) grid.innerHTML='<div class="empty" style="grid-column:1/-1">Sin resultados</div>';
+}
+window.filtrarPaises = ()=> renderPaises(document.getElementById('paisBuscar').value);
+window.resetPaises = async ()=>{
+  if(!confirm('¿Restablecer lista de países y borrar asignaciones?')) return;
+  state.paises=[...PAISES_DEFAULT()]; state.asignaciones={};
+  await saveKey('paises',{lista:state.paises});
+  await saveKey('asignaciones',{mapa:{}});
+};
+window.agregarPais = async ()=>{
+  let inp=document.getElementById('nuevoPais'), val=inp.value.trim(); if(!val) return;
+  let m=val.match(/^(\p{Emoji_Presentation}|\p{Emoji}\uFE0F)\s*(.+)$/u);
+  state.paises.push(m?{flag:m[1],nombre:m[2].trim()}:{flag:'🏴',nombre:val});
+  inp.value=''; await saveKey('paises',{lista:state.paises});
+};
+window.quitarPais = async i=>{
+  state.paises.splice(i,1); await saveKey('paises',{lista:state.paises});
+};
+
+// ── SORTEO ──
+function renderSorteo(){
+  if(!state.jugadores.length){
+    document.getElementById('rondasSelector').innerHTML='<div class="empty">Agrega jugadores primero</div>';
+    document.getElementById('asignacionesGrid').innerHTML='<div class="empty">Sin datos</div>';
+    return;
+  }
+  let html='';
+  state.jugadores.forEach(jug=>{
+    let picks=state.asignaciones[jug]||[];
+    let falta=state.config.numPicks-picks.length;
+    html+=`<div style="background:var(--fondo2);border:1px solid var(--borde);border-radius:12px;padding:14px;margin-bottom:13px">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:11px">
+        <div class="player-avatar" style="width:30px;height:30px;font-size:.72rem">${ini(jug)}</div>
+        <span style="font-weight:700;flex:1">${jug}</span>
+        <span style="font-size:.78rem;color:${falta>0?'var(--oro)':'var(--verde)'}">
+          ${falta>0?`Faltan ${falta}`:'✓ Completo'}
+        </span>
+      </div>`;
+    // picks actuales
+    if(picks.length){
+      html+=`<div style="display:flex;flex-direction:column;gap:5px;margin-bottom:9px">`;
+      picks.forEach(({key,handicap},idx)=>{
+        let p=state.paises.find(x=>paisKey(x)===key)||{flag:'🏴',nombre:key};
+        html+=`<div style="display:flex;align-items:center;gap:7px;background:var(--card);border:1px solid var(--borde);border-radius:8px;padding:6px 9px">
+          <span>${p.flag}</span>
+          <span style="flex:1;font-size:.83rem;font-weight:600">${p.nombre}</span>
+          <span style="font-size:.7rem;color:var(--gris)">Hándicap:</span>
+          <select onchange="cambiarHandicap('${jug}',${idx},this.value)"
+            style="background:var(--fondo2);border:1px solid var(--borde);color:var(--texto);padding:3px 6px;border-radius:6px;font-size:.73rem;cursor:pointer">
+            ${RONDAS.map(r=>`<option value="${r}" ${handicap===r?'selected':''}>${RLABELS[r].split(' ').slice(1).join(' ')}</option>`).join('')}
+          </select>
+          <button class="btn btn-rojo btn-sm" style="padding:3px 7px" onclick="quitarPickH('${jug}',${idx})">✕</button>
+        </div>`;
+      });
+      html+=`</div>`;
+    }
+    // grid de selección
+    if(falta>0){
+      let yaElegidos=new Set(picks.map(p=>p.key));
+      html+=`<div class="paises-grid" style="max-height:190px;overflow-y:auto">`;
+      state.paises.forEach(p=>{
+        let key=paisKey(p);
+        if(yaElegidos.has(key)) return;
+        let otroTiene=false, otroFinal=false;
+        Object.entries(state.asignaciones).forEach(([j,jp])=>{
+          if(j===jug) return;
+          let m=(jp||[]).find(pk=>pk.key===key);
+          if(m){ otroTiene=true; if(m.handicap==='finalista') otroFinal=true; }
+        });
+        if(otroTiene&&!otroFinal) return;
+        let comp=otroTiene&&otroFinal;
+        html+=`<div class="pais-chip${comp?' compartido':''}" onclick="elegirPaisH('${jug}','${key}')" title="${comp?'⚡ Compartido para final':''}">
+          <span>${p.flag}</span>
+          <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1">${p.nombre}</span>
+          ${comp?'<span style="font-size:.63rem;color:var(--oro)">⚡</span>':''}
+        </div>`;
+      });
+      html+=`</div>`;
+    }
+    html+=`</div>`;
+  });
+  document.getElementById('rondasSelector').innerHTML=html;
+  renderAsignaciones();
+}
+
+window.elegirPaisH = async (jug, key)=>{
+  let picks=state.asignaciones[jug]||[];
+  if(picks.length>=state.config.numPicks) return;
+  if(picks.find(p=>p.key===key)) return;
+  picks.push({key, handicap:'cuartos'});
+  state.asignaciones[jug]=picks;
+  await saveKey('asignaciones',{mapa:state.asignaciones});
+};
+window.quitarPickH = async (jug, idx)=>{
+  let picks=state.asignaciones[jug]||[];
+  picks.splice(idx,1);
+  state.asignaciones[jug]=picks;
+  await saveKey('asignaciones',{mapa:state.asignaciones});
+};
+window.cambiarHandicap = async (jug, idx, val)=>{
+  let picks=state.asignaciones[jug]||[];
+  if(picks[idx]) picks[idx].handicap=val;
+  state.asignaciones[jug]=picks;
+  await saveKey('asignaciones',{mapa:state.asignaciones});
+};
+
+function renderAsignaciones(){
+  let grid=document.getElementById('asignacionesGrid');
+  if(!state.jugadores.length){ grid.innerHTML='<div class="empty">Sin datos</div>'; return; }
+  grid.innerHTML=state.jugadores.map(jug=>{
+    let picks=state.asignaciones[jug]||[];
+    return `<div class="asig-card">
+      <h4>${ini(jug)} ${jug}</h4>
+      ${picks.length?picks.map(({key,handicap})=>{
+        let p=state.paises.find(x=>paisKey(x)===key)||{flag:'🏴',nombre:key};
+        return `<div class="asig-pais">
+          <span>${p.flag}</span>
+          <span style="flex:1;font-size:.78rem">${p.nombre}</span>
+          <span style="font-size:.68rem;color:var(--oro)">▲ ${RLABELS[handicap].split(' ').slice(1,3).join(' ')}</span>
+        </div>`;
+      }).join(''):'<div style="color:var(--gris);font-size:.78rem;padding:3px 0">Sin picks</div>'}
+    </div>`;
+  }).join('');
+}
+
+// ── RESULTADOS ──
+function renderFaseSelector(){
+  let div=document.getElementById('faseSelector'); if(!div) return;
+  div.innerHTML=RONDAS.map(r=>`
+    <button class="btn ${faseActiva===r?'btn-verde':'btn-outline'}" style="font-size:.78rem;padding:6px 13px"
+      onclick="setFaseActiva('${r}')">${RLABELS[r].split(' ').slice(0,2).join(' ')}</button>`).join('');
+}
+window.setFaseActiva = r=>{ faseActiva=r; renderFaseSelector(); renderResultadosPanel(); };
+
+function paisesEnJuego(fase){
+  let s=new Set();
+  Object.values(state.asignaciones).forEach(picks=>{
+    (picks||[]).forEach(({key,handicap})=>{ if(nivelFase(handicap)<=nivelFase(fase)) s.add(key); });
+  });
+  return s;
+}
+
+function renderResultadosPanel(){
+  let panel=document.getElementById('resultadosPanel'); if(!panel) return;
+  let enJuego=paisesEnJuego(faseActiva);
+  let ordenados=[...state.paises].sort((a,b)=>(enJuego.has(paisKey(b))?1:0)-(enJuego.has(paisKey(a))?1:0));
+  let html=`<div style="display:flex;flex-direction:column;gap:4px">`;
+  ordenados.forEach(p=>{
+    let key=paisKey(p), actual=state.resultados[key]||'';
+    let paso=actual&&nivelFase(actual)>=nivelFase(faseActiva);
+    let relevante=enJuego.has(key);
+    let apostadores=[];
+    Object.entries(state.asignaciones).forEach(([jug,picks])=>{
+      (picks||[]).forEach(({key:k,handicap})=>{
+        if(k===key&&nivelFase(handicap)<=nivelFase(faseActiva)) apostadores.push(jug);
+      });
+    });
+    html+=`<div style="display:flex;align-items:center;gap:8px;
+      background:${paso?'rgba(0,200,83,.08)':relevante?'rgba(255,214,0,.05)':'var(--fondo2)'};
+      border:1.5px solid ${paso?'var(--verde)':relevante?'rgba(255,214,0,.35)':'var(--borde)'};
+      border-radius:9px;padding:8px 12px;cursor:pointer" onclick="togglePaso('${key}')">
+      <span style="font-size:1rem">${p.flag}</span>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:.83rem;font-weight:${relevante?700:400};color:${relevante?'var(--texto)':'var(--gris)'}">
+          ${p.nombre}${relevante?' <span style="color:var(--oro);font-size:.68rem">⚡</span>':''}
+        </div>
+        ${apostadores.length?`<div style="font-size:.68rem;color:var(--gris)">${apostadores.join(', ')}</div>`:''}
+      </div>
+      ${actual?`<span style="font-size:.68rem;color:var(--gris)">hasta: ${RLABELS[actual]?.split(' ').slice(1,3).join(' ')||actual}</span>`:''}
+      <div style="width:26px;height:26px;border-radius:50%;border:2px solid ${paso?'var(--verde)':'var(--borde)'};
+        background:${paso?'var(--verde)':'transparent'};display:flex;align-items:center;justify-content:center;
+        font-size:.78rem;flex-shrink:0">${paso?'✓':''}</div>
+    </div>`;
+  });
+  html+=`</div>`;
+  panel.innerHTML=html;
+}
+
+window.togglePaso = async key=>{
+  let actual=state.resultados[key]||'';
+  let nActual=nivelFase(actual), nActiva=nivelFase(faseActiva);
+  if(actual===faseActiva){
+    let anterior=RONDAS[nActiva-1];
+    if(anterior) state.resultados[key]=anterior; else delete state.resultados[key];
+  } else if(nActual<nActiva || !actual){
+    state.resultados[key]=faseActiva;
+  }
+  await saveKey('resultados',{mapa:state.resultados});
+  renderResultadosPanel();
+  renderRankingPublico();
+};
+
+// ── RANKING PÚBLICO ──
+function renderRankingPublico(){
+  let el=document.getElementById('rankingPublico'); if(!el) return;
+  if(!state.jugadores.length){
+    el.innerHTML='<div class="empty">El torneo aún no ha comenzado. ¡Pronto verás la clasificación aquí!</div>'; return;
+  }
+  let ranking=state.jugadores.map(j=>{
+    let picks=state.asignaciones[j]||[];
+    let detalle=picks.map(({key,handicap})=>{
+      let p=state.paises.find(x=>paisKey(x)===key)||{flag:'🏴',nombre:key};
+      let alcanzada=faseAlcanzada(key), supera=superaHandicap(key,handicap), ptsEste=0;
+      if(supera) RONDAS.forEach(r=>{ if(nivelFase(r)<=nivelFase(alcanzada)) ptsEste+=state.config.puntos[r]||0; });
+      return {p,handicap,alcanzada,supera,ptsEste};
+    });
+    return {nombre:j, pts:calcPuntos(j), detalle};
+  }).sort((a,b)=>b.pts-a.pts);
+
+  let medals=['🥇','🥈','🥉'];
+  let html=`<h2 style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:2px;color:var(--oro);margin-bottom:14px">
+    📊 ${state.config.torneoNombre}</h2>
+  <div style="display:flex;flex-direction:column;gap:10px">`;
+  ranking.forEach((r,i)=>{
+    let cls=i===0?'rank-1':i===1?'rank-2':i===2?'rank-3':'';
+    html+=`<div style="background:var(--card);border:1.5px solid ${i===0?'rgba(255,214,0,.35)':'var(--borde)'};border-radius:13px;overflow:hidden">
+      <div style="display:flex;align-items:center;gap:10px;padding:12px 15px;border-bottom:1px solid var(--borde)">
+        <span class="${cls}" style="font-size:1.2rem">${medals[i]||`${i+1}.`}</span>
+        <span style="font-weight:700;flex:1;font-size:1rem">${r.nombre}</span>
+        <span class="pts-badge" style="font-size:.95rem;padding:4px 12px">${r.pts} pts</span>
+      </div>
+      <div style="padding:6px 15px 10px">`;
+    r.detalle.forEach(({p,handicap,alcanzada,supera,ptsEste})=>{
+      let sinRes=!alcanzada;
+      html+=`<div style="display:flex;align-items:center;gap:7px;font-size:.78rem;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04)">
+        <span style="font-size:.92rem">${p.flag}</span>
+        <span style="flex:1;font-weight:600;color:${supera?'var(--texto)':sinRes?'var(--gris)':'rgba(255,255,255,.35)'}">${p.nombre}</span>
+        <span style="color:var(--oro);font-size:.68rem">▲ ${RLABELS[handicap]?.split(' ').slice(1,3).join(' ')||handicap}</span>
+        <span style="font-size:.68rem;color:${supera?'var(--verde)':sinRes?'var(--gris)':'var(--rojo)'};white-space:nowrap">
+          ${sinRes?'⏳':supera?`✅ ${RLABELS[alcanzada]?.split(' ').slice(1,3).join(' ')||''}`:
+            `❌ ${RLABELS[alcanzada]?.split(' ').slice(1,3).join(' ')||''}`}
+        </span>
+        <span style="font-weight:700;color:${ptsEste>0?'var(--verde)':'var(--gris)'};min-width:32px;text-align:right">
+          ${ptsEste>0?'+'+ptsEste:'—'}
+        </span>
+      </div>`;
+    });
+    if(!r.detalle.length) html+=`<div style="color:var(--gris);font-size:.78rem;padding:5px 0">Sin picks aún</div>`;
+    html+=`</div></div>`;
+  });
+  html+=`</div>`;
+  el.innerHTML=html;
+}
+
+// ── WHATSAPP ──
+let waMsg='';
+window.genMsgBienvenida=()=>{
+  let c=state.config;
+  waMsg=`🏆 *${c.torneoNombre}* 🏆\n*Bienvenidos al Juego del Mundial*\n👥 ${c.grupoNombre}\n\n📋 *REGLAS*\nCada jugador elige *${c.numPicks} países* con un *hándicap* (fase mínima que debe alcanzar).\n• Si NO llega → 0 puntos ❌\n• Si supera → suma puntos de esa fase y todas las superiores ✅\n\n💰 *PUNTOS POR FASE*\n${RONDAS.slice().reverse().map(r=>`  • ${RLABELS[r]}: +${c.puntos[r]} pts`).join('\n')}\n\n🎲 ¡Que comience el draft!`;
+  mostrarWA();
+};
+window.genMsgAsignaciones=()=>{
+  if(!state.jugadores.length){ alert('No hay jugadores'); return; }
+  waMsg=`📋 *PICKS ${state.config.torneoNombre}*\n\n`;
+  state.jugadores.forEach(jug=>{
+    let picks=state.asignaciones[jug]||[];
+    waMsg+=`👤 *${jug}*\n`;
+    picks.forEach(({key,handicap})=>{
+      let p=state.paises.find(x=>paisKey(x)===key)||{flag:'🏴',nombre:key};
+      waMsg+=`  ${p.flag} ${p.nombre} ▲ ${RLABELS[handicap]?.split(' ').slice(1,3).join(' ')||handicap}\n`;
+    });
+    if(!picks.length) waMsg+=`  (sin picks)\n`;
+    waMsg+='\n';
+  });
+  waMsg+=`⚽ ¡Buena suerte!`;
+  mostrarWA();
+};
+window.genMsgRanking=()=>{
+  if(!state.jugadores.length){ alert('No hay jugadores'); return; }
+  let ranking=state.jugadores.map(j=>({nombre:j,pts:calcPuntos(j)})).sort((a,b)=>b.pts-a.pts);
+  let medals=['🥇','🥈','🥉'];
+  waMsg=`🏆 *RANKING ${state.config.torneoNombre}*\n\n`;
+  ranking.forEach((r,i)=>{ waMsg+=`${medals[i]||`${i+1}.`} *${r.nombre}* — ${r.pts} pts\n`; });
+  waMsg+=`\n⚽ ${state.config.grupoNombre}`;
+  mostrarWA();
+};
+window.genMsgReglas=()=>{
+  let c=state.config;
+  waMsg=`📜 *REGLAS* — ${c.torneoNombre}\n\n1️⃣ Cada jugador elige *${c.numPicks} países* antes del torneo.\n2️⃣ A cada país le asignas un *hándicap* (fase mínima).\n3️⃣ Si NO llega → *0 puntos*.\n4️⃣ Si llega o supera → sumas puntos de esa fase y todas las que pase.\n\n💰 Puntos por fase:\n${RONDAS.slice().reverse().map(r=>`   • ${RLABELS[r]}: +${c.puntos[r]} pts`).join('\n')}\n\n5️⃣ Gana quien más puntos acumule.\n\n⚽ ¡Mucha suerte!`;
+  mostrarWA();
+};
+function mostrarWA(){
+  document.getElementById('waPreviewContainer').style.display='block';
+  document.getElementById('waEmpty').style.display='none';
+  let now=new Date(), h=now.getHours().toString().padStart(2,'0')+':'+now.getMinutes().toString().padStart(2,'0');
+  document.getElementById('waPreview').innerHTML=
+    `<div class="wa-bubble">${waMsg.replace(/\n/g,'<br>').replace(/\*(.*?)\*/g,'<b>$1</b>')}<div class="wa-time">${h} ✓✓</div></div>`;
+}
+window.copiarMensaje=()=>{
+  navigator.clipboard.writeText(waMsg).then(()=>alert('✅ Copiado')).catch(()=>{
+    let ta=document.createElement('textarea'); ta.value=waMsg;
+    document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta); alert('✅ Copiado');
+  });
+};
+
+// ── PAÍSES DEFAULT ──
 function PAISES_DEFAULT(){
   return [
     {flag:'🇺🇸',nombre:'Estados Unidos'},{flag:'🇲🇽',nombre:'México'},{flag:'🇨🇦',nombre:'Canadá'},
@@ -543,634 +884,9 @@ function PAISES_DEFAULT(){
   ];
 }
 
-// ════════════ UTILIDADES ════════════
-function showTab(id) {
-  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-  document.getElementById('tab-'+id).classList.add('active');
-  event.target.classList.add('active');
-  if(id==='sorteo') renderSorteo();
-  if(id==='scores') renderScores();
-  if(id==='paises') renderPaises();
-  if(id==='jugadores') renderJugadores();
-}
+// ── INIT ──
+listenAll();
 
-function paisKey(p){ return p.flag+p.nombre; }
-
-function getAsignadosPorPais(ronda){
-  let set = new Set();
-  Object.values(state.asignaciones).forEach(asig => {
-    (asig[ronda]||[]).forEach(pk => set.add(pk));
-  });
-  return set;
-}
-
-// ════════════ CONFIG ════════════
-function guardarConfig(){
-  state.config.grupoNombre = document.getElementById('grupoNombre').value;
-  state.config.torneoNombre = document.getElementById('torneoNombre').value;
-  state.config.numPicks = parseInt(document.getElementById('numPicks').value)||5;
-  ['finalista','semis','cuartos','octavos','dieciseisavos'].forEach(r=>{
-    state.config.puntos[r] = parseInt(document.getElementById('pts_'+r).value)||0;
-  });
-  let ok = document.getElementById('config-ok');
-  ok.style.display='inline';
-  setTimeout(()=>ok.style.display='none', 2000);
-}
-
-// ════════════ JUGADORES ════════════
-function agregarJugador(){
-  let inp = document.getElementById('nuevoJugador');
-  let nombre = inp.value.trim();
-  if(!nombre) return;
-  if(state.jugadores.includes(nombre)){ alert('Ya existe ese jugador'); return; }
-  state.jugadores.push(nombre);
-  inp.value = '';
-  renderJugadores();
-}
-function agregarBulk(){
-  let lines = document.getElementById('bulkJugadores').value.split('\n').map(s=>s.trim()).filter(Boolean);
-  lines.forEach(n=>{ if(!state.jugadores.includes(n)) state.jugadores.push(n); });
-  document.getElementById('bulkJugadores').value='';
-  renderJugadores();
-}
-function eliminarJugador(i){
-  let nombre = state.jugadores[i];
-  state.jugadores.splice(i,1);
-  delete state.asignaciones[nombre];
-  renderJugadores();
-}
-function renderJugadores(){
-  let div = document.getElementById('playerList');
-  if(!state.jugadores.length){ div.innerHTML='<div class="empty">Agrega jugadores para comenzar</div>'; return; }
-  div.innerHTML = state.jugadores.map((j,i)=>{
-    let picks = (state.asignaciones[j]||[]).length;
-    let ini = j.replace(/[^\p{L}\p{N}]/gu,'').slice(0,2).toUpperCase() || j.slice(0,2).toUpperCase();
-    return `<div class="player-item">
-      <div class="player-avatar">${ini}</div>
-      <div style="flex:1">
-        <div class="player-name">${j}</div>
-        <div class="player-countries">${picks} de ${state.config.numPicks} países asignados</div>
-      </div>
-      <button class="btn btn-rojo btn-sm" onclick="eliminarJugador(${i})">✕</button>
-    </div>`;
-  }).join('');
-}
-
-// ════════════ PAÍSES ════════════
-function renderPaises(filtro=''){
-  let grid = document.getElementById('paisesGrid');
-  let lista = state.paises.filter(p=>
-    !filtro || (p.nombre+p.flag).toLowerCase().includes(filtro.toLowerCase())
-  );
-  grid.innerHTML = lista.map((p,i)=>{
-    let key = paisKey(p);
-    let idx = state.paises.findIndex(x=>paisKey(x)===key);
-    return `<div class="pais-chip" title="${p.nombre}">
-      <span class="pais-flag">${p.flag}</span>
-      <span class="pais-nombre">${p.nombre}</span>
-      <span style="margin-left:auto;cursor:pointer;color:var(--gris);font-size:0.75rem" onclick="quitarPais(${idx})">✕</span>
-    </div>`;
-  }).join('');
-  if(!lista.length) grid.innerHTML='<div class="empty" style="grid-column:1/-1">Sin resultados</div>';
-}
-function filtrarPaises(){
-  renderPaises(document.getElementById('paisBuscar').value);
-}
-function resetPaises(){
-  state.paises = PAISES_DEFAULT();
-  state.asignaciones = {};
-  renderPaises();
-}
-function agregarPais(){
-  let inp = document.getElementById('nuevoPais');
-  let val = inp.value.trim();
-  if(!val) return;
-  // intenta separar emoji de nombre
-  let match = val.match(/^(\p{Emoji_Presentation}|\p{Emoji}\uFE0F)\s*(.+)$/u);
-  if(match){ state.paises.push({flag:match[1], nombre:match[2].trim()}); }
-  else { state.paises.push({flag:'🏴', nombre:val}); }
-  inp.value='';
-  renderPaises();
-}
-function quitarPais(i){
-  state.paises.splice(i,1);
-  renderPaises(document.getElementById('paisBuscar').value);
-}
-
-// ════════════ SORTEO (modelo hándicap) ════════════
-function renderSorteo(){
-  if(!state.jugadores.length){
-    document.getElementById('rondasSelector').innerHTML='<div class="empty">Primero agrega jugadores en la pestaña Jugadores</div>';
-    document.getElementById('asignacionesGrid').innerHTML='<div class="empty">El sorteo aparecerá aquí</div>';
-    return;
-  }
-
-  let html = '';
-  state.jugadores.forEach(jug=>{
-    if(!state.asignaciones[jug]) state.asignaciones[jug]=[];
-    let picks = state.asignaciones[jug];
-    let falta = state.config.numPicks - picks.length;
-    let ini = jug.replace(/[^\p{L}\p{N}]/gu,'').slice(0,2).toUpperCase()||jug.slice(0,2).toUpperCase();
-
-    html += `<div class="ronda-item" style="margin-bottom:14px">
-      <div class="ronda-header" style="margin-bottom:12px">
-        <div style="display:flex;align-items:center;gap:8px">
-          <div class="player-avatar" style="width:32px;height:32px;font-size:0.75rem">${ini}</div>
-          <span style="font-weight:700;font-size:1rem">${jug}</span>
-        </div>
-        <span style="font-size:0.8rem;color:${falta>0?'var(--oro)':'var(--verde)'}">
-          ${falta>0?`Faltan ${falta} países`:'✓ Completo'}
-        </span>
-      </div>`;
-
-    // Picks ya elegidos
-    if(picks.length){
-      html += `<div style="display:flex;flex-direction:column;gap:6px;margin-bottom:10px">`;
-      picks.forEach((pick,idx)=>{
-        let p = state.paises.find(x=>paisKey(x)===pick.key)||{flag:'🏴',nombre:pick.key};
-        html += `<div style="display:flex;align-items:center;gap:8px;background:var(--fondo2);border:1px solid var(--borde);border-radius:9px;padding:7px 10px">
-          <span style="font-size:1.1rem">${p.flag}</span>
-          <span style="flex:1;font-size:0.85rem;font-weight:600">${p.nombre}</span>
-          <span style="font-size:0.72rem;color:var(--gris)">Hándicap:</span>
-          <select onchange="cambiarHandicap('${jug}',${idx},this.value)"
-            style="background:var(--card);border:1px solid var(--borde);color:var(--texto);padding:3px 6px;border-radius:7px;font-size:0.75rem;cursor:pointer">
-            ${RONDAS.map(r=>`<option value="${r}" ${pick.handicap===r?'selected':''}>${RONDA_LABELS[r].split(' ').slice(1).join(' ')}</option>`).join('')}
-          </select>
-          <button class="btn btn-rojo btn-sm" style="padding:4px 8px" onclick="quitarPickH('${jug}',${idx})">✕</button>
-        </div>`;
-      });
-      html += `</div>`;
-    }
-
-    // Grid para elegir nuevo país (si faltan)
-    if(falta>0){
-      let yaElegidos = new Set(picks.map(p=>p.key));
-      let elegidosGlobal = getPaisesElegidos();
-      // hándicap que se usará para el próximo pick (el último seleccionado, o cuartos por defecto)
-      // Para saber si el jugador está en modo "finalista" usamos el último hándicap cambiado — 
-      // pero como aún no eligió, mostramos todos disponibles y filtramos según la lógica:
-      // Un país se oculta si ya lo tiene OTRO jugador, SALVO que ese jugador lo tiene con hándicap finalista
-      // y este jugador también lo pondría en finalista. Simplificamos: país oculto si está en elegidosGlobal
-      // y NO está asociado a hándicap 'finalista' en ningún pick existente.
-      html += `<div style="font-size:0.75rem;color:var(--gris);margin-bottom:6px">
-        Elige un país — los ya elegidos por otros están ocultos (salvo finalista ⚡):
-      </div>`;
-      html += `<div class="paises-grid" style="max-height:200px;overflow-y:auto;">`;
-      state.paises.forEach(p=>{
-        let key = paisKey(p);
-        if(yaElegidos.has(key)) return; // este jugador ya lo tiene
-        // ¿lo tiene otro jugador?
-        let otroLoTiene = false;
-        let otroEsParaFinal = false;
-        Object.entries(state.asignaciones).forEach(([j, jpicks])=>{
-          if(j===jug) return;
-          let match = (jpicks||[]).find(pk=>pk.key===key);
-          if(match){ otroLoTiene=true; if(match.handicap==='finalista') otroEsParaFinal=true; }
-        });
-        if(otroLoTiene && !otroEsParaFinal) return; // ocultar
-        let compartido = otroLoTiene && otroEsParaFinal;
-        html += `<div class="pais-chip${compartido?' compartido':''}" onclick="elegirPaisH('${jug}','${key}')" title="${compartido?'⚡ Elegido para final por otro jugador':''}">
-          <span class="pais-flag">${p.flag}</span>
-          <span class="pais-nombre">${p.nombre}</span>
-          ${compartido?'<span style="font-size:0.65rem;color:var(--oro);margin-left:auto">⚡</span>':''}
-        </div>`;
-      });
-      html += `</div>`;
-    }
-    html += `</div>`;
-  });
-
-  document.getElementById('rondasSelector').innerHTML = html;
-  renderAsignaciones();
-}
-
-function elegirPaisH(jug, key){
-  if(!state.asignaciones[jug]) state.asignaciones[jug]=[];
-  if(state.asignaciones[jug].length >= state.config.numPicks) return;
-  if(state.asignaciones[jug].find(p=>p.key===key)) return;
-  // hándicap por defecto: cuartos
-  state.asignaciones[jug].push({key, handicap:'cuartos'});
-  renderSorteo();
-}
-
-// Devuelve el set de países ya elegidos por cualquier jugador
-function getPaisesElegidos(){
-  let set = new Set();
-  Object.values(state.asignaciones).forEach(picks=>{
-    (picks||[]).forEach(({key})=> set.add(key));
-  });
-  return set;
-}
-
-function cambiarHandicap(jug, idx, val){
-  if(!state.asignaciones[jug]||!state.asignaciones[jug][idx]) return;
-  state.asignaciones[jug][idx].handicap = val;
-  // no re-renderizar entero para no perder el foco del select
-  renderAsignaciones();
-  renderTablaScores();
-}
-
-function quitarPickH(jug, idx){
-  if(!state.asignaciones[jug]) return;
-  state.asignaciones[jug].splice(idx,1);
-  renderSorteo();
-}
-
-function renderAsignaciones(){
-  let grid = document.getElementById('asignacionesGrid');
-  if(!state.jugadores.length){ grid.innerHTML='<div class="empty">Sin datos</div>'; return; }
-  grid.innerHTML = state.jugadores.map(jug=>{
-    let picks = state.asignaciones[jug]||[];
-    let ini = jug.replace(/[^\p{L}\p{N}]/gu,'').slice(0,2).toUpperCase()||jug.slice(0,2).toUpperCase();
-    return `<div class="asig-card">
-      <h4><span style="margin-right:6px">${ini}</span>${jug}</h4>
-      ${picks.length ? picks.map(({key,handicap})=>{
-        let p = state.paises.find(x=>paisKey(x)===key)||{flag:'🏴',nombre:key};
-        return `<div class="asig-pais">
-          <span>${p.flag}</span>
-          <span style="flex:1;font-size:0.8rem">${p.nombre}</span>
-          <span class="asig-ronda" style="color:var(--oro)" title="Hándicap mínimo">▲ ${RONDA_LABELS[handicap].split(' ').slice(1,3).join(' ')}</span>
-        </div>`;
-      }).join('') : '<div style="color:var(--gris);font-size:0.8rem;padding:4px 0">Sin asignaciones</div>'}
-    </div>`;
-  }).join('');
-}
-
-// ════════════ PUNTUACIÓN ════════════
-let faseActiva = 'dieciseisavos';
-
-function renderScores(){
-  renderTablaScores();
-  renderFaseSelector();
-  renderResultadosPanel();
-}
-
-function renderFaseSelector(){
-  let div = document.getElementById('faseSelector');
-  if(!div) return;
-  div.innerHTML = RONDAS.map(r=>`
-    <button class="btn ${faseActiva===r?'btn-verde':'btn-outline'}" style="font-size:0.8rem;padding:7px 14px"
-      onclick="setFaseActiva('${r}')">${RONDA_LABELS[r].split(' ').slice(0,2).join(' ')}</button>
-  `).join('');
-}
-
-function setFaseActiva(r){
-  faseActiva = r;
-  renderFaseSelector();
-  renderResultadosPanel();
-}
-
-// Países que algún jugador tiene con hándicap <= faseActiva (les interesa que pasen)
-function paisesEnJuego(fase){
-  let set = new Set();
-  Object.values(state.asignaciones).forEach(picks=>{
-    (picks||[]).forEach(({key, handicap})=>{
-      if(nivelFase(handicap) <= nivelFase(fase)) set.add(key);
-    });
-  });
-  return set;
-}
-
-function renderResultadosPanel(){
-  let panel = document.getElementById('resultadosPanel');
-  if(!panel) return;
-  let enJuego = paisesEnJuego(faseActiva);
-  // Ordenar: primero los que están en juego, luego el resto
-  let ordenados = [...state.paises].sort((a,b)=>{
-    let ka = paisKey(a), kb = paisKey(b);
-    return (enJuego.has(kb)?1:0) - (enJuego.has(ka)?1:0);
-  });
-  let html = `<div style="display:flex;flex-direction:column;gap:5px">`;
-  ordenados.forEach(p=>{
-    let key = paisKey(p);
-    let actual = state.resultados[key]||'';
-    let paso = actual && nivelFase(actual) >= nivelFase(faseActiva);
-    let relevante = enJuego.has(key);
-    // Jugadores que apostaron a este país y les afecta esta fase
-    let apostadores = [];
-    Object.entries(state.asignaciones).forEach(([jug,picks])=>{
-      (picks||[]).forEach(({key:k,handicap})=>{
-        if(k===key && nivelFase(handicap)<=nivelFase(faseActiva)) apostadores.push(jug);
-      });
-    });
-    html += `<div style="display:flex;align-items:center;gap:8px;
-      background:${paso?'rgba(0,200,83,0.08)':relevante?'rgba(255,214,0,0.06)':'var(--fondo2)'};
-      border:1.5px solid ${paso?'var(--verde)':relevante?'rgba(255,214,0,0.4)':'var(--borde)'};
-      border-radius:9px;padding:8px 12px;cursor:pointer" onclick="togglePaso('${key}')">
-      <span style="font-size:1.1rem">${p.flag}</span>
-      <div style="flex:1;min-width:0">
-        <div style="font-size:0.85rem;font-weight:${relevante?'700':'400'};color:${relevante?'var(--texto)':'var(--gris)'}">
-          ${p.nombre}
-          ${relevante?'<span style="color:var(--oro);font-size:0.7rem;margin-left:4px">⚡</span>':''}
-        </div>
-        ${apostadores.length?`<div style="font-size:0.7rem;color:var(--gris);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">
-          ${apostadores.join(', ')}
-        </div>`:''}
-      </div>
-      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
-        ${actual?`<span style="font-size:0.7rem;color:var(--gris)">hasta: ${RONDA_LABELS[actual].split(' ').slice(1,3).join(' ')}</span>`:''}
-        <div style="width:28px;height:28px;border-radius:50%;border:2px solid ${paso?'var(--verde)':'var(--borde)'};
-          background:${paso?'var(--verde)':'transparent'};display:flex;align-items:center;justify-content:center;
-          font-size:0.8rem;transition:all 0.15s">
-          ${paso?'✓':''}
-        </div>
-      </div>
-    </div>`;
-  });
-  html += `</div>`;
-  panel.innerHTML = html;
-}
-
-function togglePaso(key){
-  let actual = state.resultados[key]||'';
-  let nivelActual = nivelFase(actual);
-  let nivelFaseActiva_ = nivelFase(faseActiva);
-  if(nivelActual >= nivelFaseActiva_){
-    // ya tiene esta fase o superior — si tiene exactamente esta, bajar al anterior; si tiene superior, no tocar
-    if(actual === faseActiva){
-      // retroceder al nivel anterior
-      let anterior = RONDAS[nivelFaseActiva_ - 1];
-      if(anterior) state.resultados[key] = anterior;
-      else delete state.resultados[key];
-    }
-    // si tiene una fase superior, no hacer nada (no deberíamos desmarcar fases inferiores)
-  } else {
-    // marcar que pasó esta fase
-    state.resultados[key] = faseActiva;
-  }
-  renderResultadosPanel();
-  renderTablaScores();
-}
-
-function setResultado(key, fase){
-  if(fase==='') delete state.resultados[key];
-  else state.resultados[key] = fase;
-  renderResultadosPanel();
-  renderTablaScores();
-}
-
-function toggleResultado(key, ronda, val){ /* legacy */ }
-
-// Devuelve la fase más alta alcanzada por un país (o null)
-function faseAlcanzada(key){
-  return state.resultados[key]||null;
-}
-function nivelFase(fase){
-  return JERARQUIA.indexOf(fase); // -1 si no existe
-}
-function superaHandicap(key, handicap){
-  let alcanzada = faseAlcanzada(key);
-  if(!alcanzada) return false;
-  return nivelFase(alcanzada) >= nivelFase(handicap);
-}
-
-function calcPuntos(jug){
-  let picks = state.asignaciones[jug]||[];
-  let pts = 0;
-  picks.forEach(({key, handicap})=>{
-    if(!superaHandicap(key, handicap)) return; // no superó el hándicap → 0
-    // suma puntos de todas las fases desde dieciseisavos hasta la alcanzada
-    let alcanzada = faseAlcanzada(key);
-    RONDAS.forEach(r=>{
-      if(nivelFase(r) <= nivelFase(alcanzada)){
-        pts += state.config.puntos[r]||0;
-      }
-    });
-  });
-  return pts;
-}
-
-function renderTablaScores(){
-  let el = document.getElementById('tablaScores');
-  if(!el) return;
-  if(!state.jugadores.length){
-    el.innerHTML='<div class="empty">Sin jugadores</div>'; return;
-  }
-  let ranking = state.jugadores.map(j=>{
-    let picks = state.asignaciones[j]||[];
-    let detalle = picks.map(({key,handicap})=>{
-      let p = state.paises.find(x=>paisKey(x)===key)||{flag:'🏴',nombre:key};
-      let alcanzada = faseAlcanzada(key);
-      let supera = superaHandicap(key, handicap);
-      let ptsEste = 0;
-      if(supera) RONDAS.forEach(r=>{ if(nivelFase(r)<=nivelFase(alcanzada)) ptsEste+=state.config.puntos[r]||0; });
-      return {p, handicap, alcanzada, supera, ptsEste};
-    });
-    return {nombre:j, pts:calcPuntos(j), detalle};
-  }).sort((a,b)=>b.pts-a.pts);
-
-  let medals = ['🥇','🥈','🥉'];
-  let html = `<div style="display:flex;flex-direction:column;gap:10px">`;
-  ranking.forEach((r,i)=>{
-    let cls = i===0?'rank-1':i===1?'rank-2':i===2?'rank-3':'';
-    html += `<div style="background:var(--fondo2);border:1.5px solid ${i===0?'rgba(255,214,0,0.3)':'var(--borde)'};border-radius:12px;overflow:hidden">
-      <!-- Cabecera jugador -->
-      <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--borde)">
-        <span class="${cls}" style="font-size:1.2rem">${medals[i]||`${i+1}.`}</span>
-        <span style="font-weight:700;flex:1;font-size:1rem">${r.nombre}</span>
-        <span class="pts-badge" style="font-size:1rem;padding:4px 12px">${r.pts} pts</span>
-      </div>
-      <!-- Países -->
-      <div style="padding:6px 14px 10px">`;
-    r.detalle.forEach(({p,handicap,alcanzada,supera,ptsEste})=>{
-      let sinResult = !alcanzada;
-      let hLabel = RONDA_LABELS[handicap].split(' ').slice(1,3).join(' ');
-      let aLabel = alcanzada ? RONDA_LABELS[alcanzada].split(' ').slice(1,3).join(' ') : '—';
-      html += `<div style="display:flex;align-items:center;gap:7px;font-size:0.8rem;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.04)">
-        <span style="font-size:0.95rem">${p.flag}</span>
-        <span style="flex:1;font-weight:600;color:${supera?'var(--texto)':sinResult?'var(--gris)':'rgba(255,255,255,0.4)'}">${p.nombre}</span>
-        <span style="color:var(--oro);font-size:0.7rem;white-space:nowrap">▲ ${hLabel}</span>
-        <span style="font-size:0.7rem;color:${supera?'var(--verde)':sinResult?'var(--gris)':'var(--rojo)'};white-space:nowrap">
-          ${sinResult?'⏳ pendiente':supera?`✅ ${aLabel}`:`❌ ${aLabel}`}
-        </span>
-        <span style="font-weight:700;color:${ptsEste>0?'var(--verde)':'var(--gris)'};min-width:34px;text-align:right">
-          ${ptsEste>0?'+'+ptsEste:'—'}
-        </span>
-      </div>`;
-    });
-    if(!r.detalle.length) html += `<div style="color:var(--gris);font-size:0.8rem;padding:6px 0">Sin picks</div>`;
-    html += `</div></div>`;
-  });
-  html += `</div>`;
-  el.innerHTML = html;
-}
-
-// ════════════ WHATSAPP ════════════
-let waMsg = '';
-function genMsgBienvenida(){
-  let cfg = state.config;
-  waMsg = `🏆 *${cfg.torneoNombre}* 🏆
-*Bienvenidos al Juego del Mundial*
-👥 Grupo: ${cfg.grupoNombre}
-
-📋 *REGLAS*
-Cada jugador elige *${cfg.numPicks} países* y asigna a cada uno un *hándicap* (la fase mínima que debe alcanzar).
-  • Si el país NO llega a su hándicap → 0 puntos ❌
-  • Si lo supera → suma puntos de esa fase y todas las que pase ✅
-
-💰 *PUNTOS POR FASE*
-${RONDAS.slice().reverse().map(r=>`  • ${RONDA_LABELS[r]}: +${cfg.puntos[r]} pts`).join('\n')}
-_(se acumulan: un finalista suma puntos de finalista + semis + cuartos + octavos + dieciseisavos)_
-
-🎲 ¡Que comience el draft!
-Elige tus países antes del inicio del torneo ⚽`;
-  mostrarWA();
-}
-
-function genMsgAsignaciones(){
-  if(!state.jugadores.length){ alert('No hay jugadores'); return; }
-  waMsg = `📋 *PICKS ${state.config.torneoNombre}*\n\n`;
-  state.jugadores.forEach(jug=>{
-    let picks = state.asignaciones[jug]||[];
-    waMsg += `👤 *${jug}*\n`;
-    picks.forEach(({key,handicap})=>{
-      let p = state.paises.find(x=>paisKey(x)===key)||{flag:'🏴',nombre:key};
-      let hLabel = RONDA_LABELS[handicap].split(' ').slice(1,3).join(' ');
-      waMsg += `  ${p.flag} ${p.nombre} ▲ ${hLabel}\n`;
-    });
-    if(!picks.length) waMsg += `  _(sin picks)_\n`;
-    waMsg += '\n';
-  });
-  waMsg += `⚽ ¡Buena suerte a todos!`;
-  mostrarWA();
-}
-
-function genMsgRanking(){
-  if(!state.jugadores.length){ alert('No hay jugadores'); return; }
-  let ranking = state.jugadores.map(j=>({nombre:j,pts:calcPuntos(j)})).sort((a,b)=>b.pts-a.pts);
-  let medals = ['🥇','🥈','🥉'];
-  waMsg = `🏆 *RANKING ${state.config.torneoNombre}*\n\n`;
-  ranking.forEach((r,i)=>{
-    waMsg += `${medals[i]||`${i+1}.`} *${r.nombre}* — ${r.pts} pts\n`;
-  });
-  waMsg += `\n⚽ ${state.config.grupoNombre}`;
-  mostrarWA();
-}
-
-function genMsgReglas(){
-  let cfg = state.config;
-  waMsg = `📜 *REGLAS* — ${cfg.torneoNombre}
-
-1️⃣ Cada jugador elige *${cfg.numPicks} países* antes del inicio del torneo.
-2️⃣ A cada país le asignas un *hándicap*: la fase mínima que crees que alcanzará.
-3️⃣ Si el país *no* llega a su hándicap → *0 puntos*.
-4️⃣ Si llega o supera su hándicap → sumas los puntos de *esa fase y todas las superiores*.
-
-💰 *Puntos por fase alcanzada:*
-${RONDAS.slice().reverse().map(r=>`   • ${RONDA_LABELS[r]}: +${cfg.puntos[r]} pts`).join('\n')}
-
-5️⃣ Gana quien más puntos acumule al final.
-
-⚽ ¡Mucha suerte a todos!`;
-  mostrarWA();
-}
-
-function mostrarWA(){
-  let container = document.getElementById('waPreviewContainer');
-  let empty = document.getElementById('waEmpty');
-  let preview = document.getElementById('waPreview');
-  container.style.display = 'block';
-  empty.style.display = 'none';
-  let now = new Date();
-  let hora = now.getHours().toString().padStart(2,'0')+':'+now.getMinutes().toString().padStart(2,'0');
-  preview.innerHTML = `<div class="wa-bubble">${waMsg.replace(/\n/g,'<br>').replace(/\*(.*?)\*/g,'<b>$1</b>')}<div class="wa-time">${hora} ✓✓</div></div>`;
-}
-
-function copiarMensaje(){
-  navigator.clipboard.writeText(waMsg).then(()=>{ alert('✅ Mensaje copiado al portapapeles'); }).catch(()=>{
-    let ta = document.createElement('textarea');
-    ta.value=waMsg; document.body.appendChild(ta); ta.select(); document.execCommand('copy');
-    document.body.removeChild(ta); alert('✅ Mensaje copiado');
-  });
-}
-
-function abrirWA(){
-  let encoded = encodeURIComponent(waMsg);
-  window.open('https://web.whatsapp.com/','_blank');
-}
-
-// ════════════ PERSISTENCIA ════════════
-const STORAGE_KEY = 'mundial_wa_state';
-
-function saveState(){
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({
-      config: state.config,
-      jugadores: state.jugadores,
-      paises: state.paises,
-      asignaciones: state.asignaciones,
-      resultados: state.resultados
-    }));
-  } catch(e){ console.warn('No se pudo guardar:', e); }
-}
-
-function loadState(){
-  try {
-    let raw = localStorage.getItem(STORAGE_KEY);
-    if(!raw) return false;
-    let saved = JSON.parse(raw);
-    if(saved.config)      state.config      = {...state.config, ...saved.config};
-    if(saved.jugadores)   state.jugadores   = saved.jugadores;
-    if(saved.paises)      state.paises      = saved.paises;
-    if(saved.asignaciones)state.asignaciones= saved.asignaciones;
-    if(saved.resultados)  state.resultados  = saved.resultados;
-    return true;
-  } catch(e){ return false; }
-}
-
-// Envuelve las funciones que modifican el estado para que guarden automáticamente
-const _orig = { elegirPaisH, quitarPickH, cambiarHandicap, agregarJugador, eliminarJugador,
-                agregarBulk, agregarPais, quitarPais, resetPaises, guardarConfig,
-                setResultado, togglePaso };
-function autoSave(fn){ return function(){ fn.apply(this,arguments); saveState(); }; }
-elegirPaisH      = autoSave(_orig.elegirPaisH);
-quitarPickH      = autoSave(_orig.quitarPickH);
-cambiarHandicap  = autoSave(_orig.cambiarHandicap);
-agregarJugador   = autoSave(_orig.agregarJugador);
-eliminarJugador  = autoSave(_orig.eliminarJugador);
-agregarBulk      = autoSave(_orig.agregarBulk);
-agregarPais      = autoSave(_orig.agregarPais);
-quitarPais       = autoSave(_orig.quitarPais);
-resetPaises      = autoSave(_orig.resetPaises);
-guardarConfig    = autoSave(_orig.guardarConfig);
-setResultado     = autoSave(_orig.setResultado);
-togglePaso       = autoSave(_orig.togglePaso);
-
-function borrarDatos(){
-  if(!confirm('⚠️ ¿Borrar todos los datos? Esta acción no se puede deshacer.')) return;
-  localStorage.removeItem(STORAGE_KEY);
-  location.reload();
-}
-
-// ════════════ INIT ════════════
-let _cargado = loadState();
-renderPaises();
-if(_cargado){
-  renderJugadores();
-  // Sincronizar inputs de config con los valores cargados
-  document.getElementById('grupoNombre').value  = state.config.grupoNombre;
-  document.getElementById('torneoNombre').value = state.config.torneoNombre;
-  document.getElementById('numPicks').value     = state.config.numPicks;
-  ['finalista','semis','cuartos','octavos','dieciseisavos'].forEach(r=>{
-    let el = document.getElementById('pts_'+r);
-    if(el) el.value = state.config.puntos[r]||0;
-  });
-}
-
-// Botón de borrar datos en la pestaña Config
-document.addEventListener('DOMContentLoaded', ()=>{});
-// Añadir botón de borrar al final de la card de config
-(function(){
-  let cards = document.querySelectorAll('#tab-config .card');
-  if(cards.length){
-    let div = document.createElement('div');
-    div.style.cssText='margin-top:14px;padding-top:14px;border-top:1px solid var(--borde);display:flex;align-items:center;gap:12px';
-    div.innerHTML = `<span style="font-size:0.8rem;color:var(--gris)">💾 Los datos se guardan automáticamente en este navegador.</span>
-      <button class="btn btn-rojo btn-sm" style="margin-left:auto" onclick="borrarDatos()">🗑 Borrar todo</button>`;
-    cards[0].appendChild(div);
-  }
-})();
 </script>
 </body>
 </html>
