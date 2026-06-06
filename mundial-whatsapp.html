@@ -584,8 +584,9 @@ window.resetPaises = async ()=>{
 };
 window.agregarPais = async ()=>{
   let inp=document.getElementById('nuevoPais'), val=inp.value.trim(); if(!val) return;
-  let m=val.match(/^(\p{Emoji_Presentation}|\p{Emoji}\uFE0F)\s*(.+)$/u);
-  state.paises.push(m?{flag:m[1],nombre:m[2].trim()}:{flag:'🏴',nombre:val});
+
+let m=val.match(/^([\uD83C][\uDDE6-\uDDFF][\uD83C][\uDDE6-\uDDFF])\s*(.+)$/);
+  state.paises.push(m?{flag:m[1].trim(),nombre:m[2].trim()}:{flag:'🏳️',nombre:val});
   inp.value=''; await saveKey('paises',{lista:state.paises});
 };
 window.quitarPais = async i=>{
